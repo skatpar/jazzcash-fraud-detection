@@ -1,0 +1,174 @@
+# JazzCash Fraud Detection Configuration
+
+# Data Paths
+data:
+  raw:
+    iar_transactions: "data/raw/iar_transactions.csv"
+    mbar_customers: "data/raw/mbar_customers.csv"
+    fraud_labels: "data/raw/fraud_labels.csv"
+
+  processed:
+    integrated: "data/processed/integrated_dataset.csv"
+    cleaned: "data/processed/cleaned_dataset.csv"
+
+  features:
+    engineered: "data/features/feature_engineered_dataset.csv"
+    selected: "data/features/selected_features.txt"
+
+# Data Integration
+integration:
+  join_keys:
+    transaction_fraud: "tid"
+    customer_sender: "sender"
+    customer_receiver: "receiver"
+
+  validation:
+    min_join_coverage: 0.95
+    max_missing_rate: 0.05
+
+# Data Cleaning
+cleaning:
+  imputation:
+    numerical:
+      balance:
+        method: "forward_fill"
+        fallback: "median"
+      age:
+        method: "median"
+        group_by: "location"
+      limits:
+        method: "median"
+        group_by: "account_type_sender"
+
+    categorical:
+      channel: "mode"
+      type: "UNKNOWN"
+      location: "UNSPECIFIED"
+      kyc_status: "NOT_VERIFIED"
+
+  outliers:
+    iqr_multiplier: 3.0
+    contamination: 0.05  # For Isolation Forest
+    flag_only: true  # Don't remove outliers
+
+  quality_rules:
+    hard:
+      - "tid is not null"
+      - "time is not null"
+      - "amount is not null"
+      - "amount > 0"
+
+    soft:
+      - "time >= registration_date_sender"
+      - "amount < 99.9th percentile"
+
+# Feature Engineering
+feature_engineering:
+  temporal:
+    extract_components: true
+    cyclical_encoding: true
+
+  aggregation:
+    enabled: true
+    windows: [1, 7, 30]  # days
+    metrics:
+      - "count"
+      - "sum"
+      - "mean"
+      - "max"
+      - "std"
+
+  network:
+    enabled: true
+    compute_degree: true
+    track_relationships: true
+
+  encoding:
+    categorical:
+      method: "frequency"  # frequency, target, onehot
+      rare_threshold: 0.01
+
+    numerical:
+      standardize: false  # Done during modeling
+      log_transform: true  # For amount features
+
+# Feature Selection
+feature_selection:
+  correlation:
+    threshold: 0.95
+    keep_higher_target_corr: true
+
+  vif:
+    threshold: 10.0
+    iterative: true
+
+  importance:
+    methods:
+      - "mutual_information"
+      - "random_forest"
+      - "lasso"
+    ensemble: true
+
+  final:
+    n_features: 50
+    validation:
+      cv_folds: 5
+      scoring: "roc_auc"
+
+# Modeling
+modeling:
+  target: "is_fraud"
+
+  split:
+    train: 0.6
+    validation: 0.2
+    test: 0.2
+    strategy: "temporal"  # temporal or stratified
+
+  class_imbalance:
+    method: "smote"  # smote, adasyn, class_weight
+    sampling_ratio: 0.5
+
+  algorithms:
+    - name: "logistic_regression"
+      enabled: true
+    - name: "random_forest"
+      enabled: true
+    - name: "xgboost"
+      enabled: true
+    - name: "lightgbm"
+      enabled: true
+
+  evaluation:
+    primary_metric: "roc_auc"
+    additional_metrics:
+      - "precision_recall_auc"
+      - "f1_score"
+      - "precision"
+      - "recall"
+
+    thresholds: [0.3, 0.5, 0.7, 0.9]
+
+# Performance Targets
+targets:
+  data_quality:
+    join_coverage: 0.95
+    missing_rate: 0.05
+    outlier_rate: 0.02
+
+  features:
+    min_count: 30
+    max_count: 150
+    max_vif: 10.0
+
+  model:
+    min_roc_auc: 0.85
+    min_pr_auc: 0.70
+    max_fpr_at_80_recall: 0.05
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  save_to_file: true
+  log_dir: "logs"
