@@ -1,0 +1,100 @@
+# PySpark Configuration for Fraud Detection Pipeline
+
+# Spark Session Configuration
+spark:
+  app_name: "JazzCash-Fraud-Detection"
+  master: "spark://localhost:7077"  # Update with your Spark master URL
+
+  # Executor Configuration (adjust based on cluster capacity)
+  executor:
+    memory: "20g"
+    memory_overhead: "1g"
+    cores: 4
+    instances: 10
+
+  # Driver Configuration
+  driver:
+    memory: "8g"
+    max_result_size: "4g"
+
+  # Performance Tuning
+  sql:
+    shuffle_partitions: 200
+    adaptive_enabled: true
+    adaptive_coalesce_partitions: true
+    broadcast_timeout: 600
+    autoBroadcastJoinThreshold: 104857600  # 100MB
+
+  # Memory Management
+  memory:
+    fraction: 0.8
+    storage_fraction: 0.3
+
+  # Serialization
+  serializer: "org.apache.spark.serializer.KryoSerializer"
+  kryoserializer_buffer_max: "1024m"
+
+  # Network
+  network:
+    timeout: "600s"
+
+  # Checkpointing
+  checkpoint_dir: "/tmp/spark-checkpoints"
+
+  # Dynamic Allocation
+  dynamic_allocation:
+    enabled: true
+    min_executors: 5
+    max_executors: 20
+    initial_executors: 10
+
+# Data Processing Configuration
+data_processing:
+  # Partition strategies by table size
+  partitioning:
+    small_table: 10      # < 1GB
+    medium_table: 50     # 1-50GB
+    large_table: 200     # 50-500GB
+    huge_table: 500      # > 500GB
+
+  # Caching strategy
+  cache:
+    enabled: true
+    storage_level: "MEMORY_AND_DISK_SER"  # Serialized for memory efficiency
+
+  # Checkpoint frequency (every N transformations)
+  checkpoint_frequency: 10
+
+  # Sample fraction for development
+  sample_fraction: 0.01
+
+  # Write configurations
+  write:
+    mode: "overwrite"
+    format: "parquet"
+    compression: "snappy"
+    coalesce_files: true
+    max_records_per_file: 10000000
+
+# Performance Profiles
+profiles:
+  development:
+    executor_memory: "4g"
+    executor_cores: 2
+    executor_instances: 2
+    shuffle_partitions: 20
+
+  production:
+    executor_memory: "20g"
+    executor_cores: 4
+    executor_instances: 20
+    shuffle_partitions: 200
+
+  high_memory:
+    executor_memory: "32g"
+    executor_cores: 4
+    executor_instances: 15
+    shuffle_partitions: 300
+
+# Current active profile
+active_profile: "development"

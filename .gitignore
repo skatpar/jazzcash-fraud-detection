@@ -1,0 +1,109 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Data files (large datasets)
+data/raw/
+data/processed/
+data/features/
+data/models/
+*.parquet
+*.csv
+*.json
+*.xlsx
+*.xls
+
+# Logs
+logs/
+*.log
+
+# Plots (optional - remove if you want to track plots)
+plots/
+*.png
+*.jpg
+*.jpeg
+*.pdf
+
+# Spark
+metastore_db/
+derby.log
+spark-warehouse/
+.spark-checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Credentials
+config/db_config.yaml
+.env
+.env.local
+credentials.json
+
+# Database
+*.db
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Model files
+*.pkl
+*.h5
+*.model
+*.bin
+
+# JDBC Driver (large file)
+utils/*.jar
+
+# OS
+Thumbs.db
+.DS_Store
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json

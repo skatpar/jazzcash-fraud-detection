@@ -1,0 +1,229 @@
+# Feature Engineering Configuration
+
+# Time Windows for Aggregations (in days)
+time_windows:
+  short_term: [1, 3]
+  medium_term: [7, 15]
+  long_term: [30, 60, 90]
+  all: [1, 3, 7, 15, 30]
+
+# Feature Categories
+feature_categories:
+  transaction_features:
+    enabled: true
+    features:
+      - trx_amt
+      - log_trx_amt
+      - fee
+      - fed
+      - total_cost
+      - fee_ratio
+      - is_round_amount
+      - is_round_100
+      - balance_change_pct
+
+  temporal_features:
+    enabled: true
+    features:
+      - trx_hour
+      - trx_day_of_week
+      - trx_day_of_month
+      - is_weekend
+      - is_business_hours
+      - is_odd_hour
+      - time_bucket
+
+  account_features:
+    enabled: true
+    features:
+      - from_account_age_days
+      - to_account_age_days
+      - from_customer_age
+      - to_customer_age
+      - from_is_dormant
+      - from_is_reactivated
+      - from_days_inactive
+      - from_trust_score
+      - from_has_mpin
+      - from_is_filer
+
+  aggregation_features:
+    enabled: true
+    sender_aggs:
+      - from_tx_count
+      - from_total_amt
+      - from_avg_amt
+      - from_max_amt
+      - from_std_amt
+      - from_unique_recipients
+      - from_unique_channels
+      - from_unique_types
+
+    receiver_aggs:
+      - to_tx_count
+      - to_total_amt
+      - to_avg_amt
+      - to_unique_senders
+
+  velocity_features:
+    enabled: true
+    features:
+      - velocity_1d_to_7d
+      - amount_acceleration
+      - is_activity_burst
+
+  geographic_features:
+    enabled: true
+    features:
+      - is_same_city
+      - is_same_region
+      - from_city_fraud_risk
+      - to_city_fraud_risk
+
+  network_features:
+    enabled: false  # Computationally expensive
+    features:
+      - from_to_interaction_count
+      - is_frequent_pair
+
+# Categorical Encoding Strategies
+encoding:
+  frequency_encoding:
+    enabled: true
+    columns:
+      - trx_channel
+      - trx_type
+      - from_account_type_name
+      - to_account_type_name
+
+  target_encoding:
+    enabled: true
+    columns:
+      - trx_channel
+      - trx_type
+      - from_city
+      - to_city
+      - from_region
+      - to_region
+    smoothing: 0.1
+
+  one_hot_encoding:
+    enabled: false  # High cardinality - prefer frequency/target encoding
+    max_categories: 10
+
+# Feature Selection Configuration
+feature_selection:
+  # Correlation thresholds
+  correlation:
+    max_intercorr: 0.9  # Remove features with correlation > 0.9
+    min_target_corr: 0.01  # Keep features with abs(corr) > 0.01 with target
+
+  # VIF threshold
+  vif:
+    max_vif: 10.0
+    enabled: true
+
+  # Variance threshold
+  variance:
+    min_variance: 0.01
+    enabled: true
+
+  # Feature importance
+  importance:
+    method: "random_forest"  # Options: random_forest, xgboost, mutual_info
+    n_estimators: 100
+    top_k_features: 100
+
+  # Recursive Feature Elimination
+  rfe:
+    enabled: false  # Computationally expensive
+    n_features_to_select: 50
+    step: 5
+
+# Missing Value Handling
+missing_values:
+  # Strategy: drop, mean, median, mode, constant, indicator
+  numerical:
+    default_strategy: "median"
+    by_column:
+      from_year_of_birth: "median"
+      to_year_of_birth: "median"
+      from_account_age_days: "constant"
+      to_account_age_days: "constant"
+
+  categorical:
+    default_strategy: "constant"
+    fill_value: "UNKNOWN"
+
+  # Create missing indicators
+  create_indicators: true
+  indicator_columns:
+    - from_year_of_birth
+    - to_year_of_birth
+    - utility_company
+    - customer_msisdn
+
+# Outlier Detection
+outliers:
+  method: "iqr"  # Options: zscore, iqr, isolation_forest
+
+  zscore:
+    threshold: 3.0
+
+  iqr:
+    multiplier: 3.0
+
+  # Treatment: cap, remove, flag
+  treatment: "flag"
+
+  # Columns to check
+  columns:
+    - trx_amt
+    - fee
+    - start_balance
+    - end_balance
+
+# Data Quality Checks
+data_quality:
+  enabled: true
+  checks:
+    - name: "no_null_trans_id"
+      description: "Transaction ID should never be null"
+      column: "trans_id"
+      type: "not_null"
+
+    - name: "no_null_amount"
+      description: "Transaction amount should never be null"
+      column: "trx_amt"
+      type: "not_null"
+
+    - name: "positive_amount"
+      description: "Transaction amount should be positive"
+      column: "trx_amt"
+      type: "greater_than"
+      value: 0
+
+    - name: "no_duplicate_trans_id"
+      description: "Transaction IDs should be unique"
+      column: "trans_id"
+      type: "unique"
+
+    - name: "valid_date_range"
+      description: "Dates should be within expected range"
+      column: "data_date"
+      type: "date_range"
+      min_date: "2025-01-01"
+      max_date: "2025-12-31"
+
+# Output Configuration
+output:
+  base_path: "data/features"
+
+  feature_store:
+    enabled: true
+    path: "data/features/feature_store.parquet"
+    partitions: ["data_date", "is_fraud"]
+
+  feature_metadata:
+    enabled: true
+    path: "data/features/feature_metadata.json"
