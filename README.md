@@ -5,6 +5,7 @@ A comprehensive, production-ready fraud detection system for JazzCash mobile wal
 ## Table of Contents
 
 - [Overview](#overview)
+- [Quick Start with Dummy Data](#quick-start-with-dummy-data) ⭐ **NEW!**
 - [Project Structure](#project-structure)
 - [Features](#features)
 - [Prerequisites](#prerequisites)
@@ -42,6 +43,58 @@ This project implements an end-to-end fraud detection system for JazzCash transa
 | stixor_iar_20250701_sample | 4.6M | 5GB | Sample for development |
 | stixor_mbar_v | 85M | 100GB | Customer accounts |
 | fraud | 40K | <1GB | Fraud cases |
+
+## Quick Start with Dummy Data
+
+**Don't have database access?** No problem! Generate realistic dummy data and run the complete pipeline in minutes.
+
+### One-Command Quick Start
+
+```bash
+# Linux/Mac
+./run_with_dummy_data.sh
+
+# Windows
+run_with_dummy_data.bat
+```
+
+This will:
+1. Generate 100K users and 400K transactions
+2. Create realistic fraud patterns
+3. Run the complete fraud detection pipeline
+4. Train and evaluate an XGBoost model
+
+**Runtime**: ~20 minutes | **No database required!**
+
+### Manual Dummy Data Generation
+
+```bash
+# Step 1: Generate dummy data
+python utils/generate_dummy_data.py \
+    --num-users 100000 \
+    --num-transactions 400000
+
+# Step 2: Prepare dataset
+python utils/prepare_dummy_dataset.py
+
+# Step 3: Run pipeline
+python pipelines/main_pipeline.py --skip-data --model xgboost
+```
+
+### Customization
+
+```bash
+# Quick test (10K users, 50K transactions)
+python utils/generate_dummy_data.py --num-users 10000 --num-transactions 50000
+
+# Large dataset (200K users, 1M transactions)
+python utils/generate_dummy_data.py --num-users 200000 --num-transactions 1000000
+
+# Higher fraud rate for testing
+python utils/generate_dummy_data.py --fraud-rate 0.01
+```
+
+**📖 Complete Guide**: See [DUMMY_DATA_GUIDE.md](DUMMY_DATA_GUIDE.md) for detailed instructions.
 
 ## Project Structure
 
