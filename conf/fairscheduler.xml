@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<allocations>
+  <pool name="default">
+    <schedulingMode>FAIR</schedulingMode>
+    <weight>1</weight>
+    <minShare>2</minShare>
+  </pool>
+  
+  <pool name="feature_engineering">
+    <schedulingMode>FAIR</schedulingMode>
+    <weight>2</weight>
+    <minShare>4</minShare>
+  </pool>
+  
+  <pool name="model_training">
+    <schedulingMode>FAIR</schedulingMode>
+    <weight>3</weight>
+    <minShare>6</minShare>
+  </pool>
+  
+  <pool name="batch_processing">
+    <schedulingMode>FAIR</schedulingMode>
+    <weight>2</weight>
+    <minShare>3</minShare>
+  </pool>
+  
+  <pool name="data_ingestion">
+    <schedulingMode>FAIR</schedulingMode>
+    <weight>1</weight>
+    <minShare>2</minShare>
+  </pool>
+  
+  <pool name="analytics">
+    <schedulingMode>FAIR</schedulingMode>
+    <weight>1</weight>
+    <minShare>2</minShare>
+  </pool>
+</allocations>
