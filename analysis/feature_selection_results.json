@@ -1,0 +1,622 @@
+{
+  "metadata": {
+    "dataset": "combined_features_balanced_1_1",
+    "total_records": 278,
+    "fraud_cases": 139,
+    "legitimate_cases": 139,
+    "cutoff_date": "2025-07-01"
+  },
+  "feature_counts": {
+    "original": 73,
+    "after_variance": 66,
+    "after_correlation": 33,
+    "after_vif": 28,
+    "recommended": 28
+  },
+  "removed_features": {
+    "low_variance": [
+      "mbar_credit_dl_ml_yl",
+      "mbar_debit_dl_ml_yl",
+      "day_of_week",
+      "is_weekend",
+      "txn_weekend_txns_3d",
+      "type_bill_payment",
+      "user_days_since_last_txn"
+    ],
+    "high_correlation": [
+      "user_peak_hour_txns_7d",
+      "txn_night_txns_3d",
+      "user_total_txns_7d",
+      "user_unique_recipients_7d",
+      "user_min_amount_3d",
+      "user_unique_channels_3d",
+      "user_avg_amount_7d",
+      "user_night_txns_7d",
+      "user_min_balance_7d",
+      "end_balance",
+      "user_avg_end_balance_7d",
+      "user_weekend_txns_7d",
+      "user_median_amount_7d",
+      "night_weekend_combo",
+      "user_min_amount_7d",
+      "user_unique_types_7d",
+      "txn_unique_recipients_3d",
+      "user_avg_start_balance_7d",
+      "user_avg_amount_per_recipient_7d",
+      "user_total_amount_7d",
+      "user_max_amount_to_single_recipient_7d",
+      "user_max_amount_7d",
+      "txn_txns_3d",
+      "start_balance",
+      "user_median_amount_3d",
+      "txn_total_amount_3d",
+      "user_total_amount_3d",
+      "user_off_peak_hour_txns_7d",
+      "user_unique_types_3d",
+      "user_unique_recipients_3d",
+      "user_total_txns_3d",
+      "user_max_balance_7d",
+      "user_txn_frequency_score_7d"
+    ],
+    "high_vif": [
+      "user_max_amount_3d",
+      "user_avg_amount_3d",
+      "user_balance_volatility_7d",
+      "txn_unique_types_3d",
+      "txn_unique_channels_3d"
+    ]
+  },
+  "recommended_features": [
+    "trx_amt",
+    "is_business_hours",
+    "txn_multi_channel_recent",
+    "channel_ussd_api",
+    "mbar_year_of_birth",
+    "type_mobile_load",
+    "user_recipient_concentration_ratio_7d",
+    "txn_is_high_activity_3d",
+    "start_balance_log",
+    "txn_amount_deviation_from_avg",
+    "user_channel_diversity_score_7d",
+    "user_avg_time_between_txns_7d",
+    "channel_payment_gateway",
+    "is_night",
+    "user_type_diversity_score_7d",
+    "user_unique_channels_7d",
+    "type_transfer_c2b",
+    "channel_new_jc_app",
+    "channel_mobile_app",
+    "balance_change_pct",
+    "balance_change",
+    "channel_ussd",
+    "txn_min_amount_3d",
+    "is_unusual_hour",
+    "txn_avg_amount_3d",
+    "hour_of_day",
+    "txn_max_amount_3d",
+    "type_transfer_c2c"
+  ],
+  "feature_importance": {
+    "random_forest": [
+      {
+        "feature": "trx_amt",
+        "importance": 0.15001844982842577
+      },
+      {
+        "feature": "balance_change",
+        "importance": 0.1427165218841288
+      },
+      {
+        "feature": "channel_payment_gateway",
+        "importance": 0.09262464778172086
+      },
+      {
+        "feature": "balance_change_pct",
+        "importance": 0.08768699145660726
+      },
+      {
+        "feature": "start_balance_log",
+        "importance": 0.07083332995603994
+      },
+      {
+        "feature": "user_type_diversity_score_7d",
+        "importance": 0.0659934557675799
+      },
+      {
+        "feature": "txn_amount_deviation_from_avg",
+        "importance": 0.05333547015096528
+      },
+      {
+        "feature": "user_channel_diversity_score_7d",
+        "importance": 0.04980470022201073
+      },
+      {
+        "feature": "txn_max_amount_3d",
+        "importance": 0.04100992893487833
+      },
+      {
+        "feature": "user_recipient_concentration_ratio_7d",
+        "importance": 0.033030226599372256
+      },
+      {
+        "feature": "user_avg_time_between_txns_7d",
+        "importance": 0.032847106894983755
+      },
+      {
+        "feature": "txn_avg_amount_3d",
+        "importance": 0.030155988750561285
+      },
+      {
+        "feature": "user_unique_channels_7d",
+        "importance": 0.028103271543506395
+      },
+      {
+        "feature": "txn_min_amount_3d",
+        "importance": 0.021463133498716192
+      },
+      {
+        "feature": "txn_is_high_activity_3d",
+        "importance": 0.019668147366740503
+      },
+      {
+        "feature": "hour_of_day",
+        "importance": 0.016641888677643827
+      },
+      {
+        "feature": "type_transfer_c2c",
+        "importance": 0.01482212923115022
+      },
+      {
+        "feature": "txn_multi_channel_recent",
+        "importance": 0.01376767131965512
+      },
+      {
+        "feature": "channel_new_jc_app",
+        "importance": 0.011650158650940724
+      },
+      {
+        "feature": "mbar_year_of_birth",
+        "importance": 0.008584081280008605
+      },
+      {
+        "feature": "is_business_hours",
+        "importance": 0.006227541551641008
+      },
+      {
+        "feature": "channel_ussd",
+        "importance": 0.003330688341467833
+      },
+      {
+        "feature": "type_transfer_c2b",
+        "importance": 0.0027067045329783363
+      },
+      {
+        "feature": "channel_ussd_api",
+        "importance": 0.0025427312286979385
+      },
+      {
+        "feature": "is_night",
+        "importance": 0.00043503454957922105
+      },
+      {
+        "feature": "is_unusual_hour",
+        "importance": 0.0
+      },
+      {
+        "feature": "channel_mobile_app",
+        "importance": 0.0
+      },
+      {
+        "feature": "type_mobile_load",
+        "importance": 0.0
+      }
+    ],
+    "xgboost": [
+      {
+        "feature": "channel_payment_gateway",
+        "importance": 0.114796482026577
+      },
+      {
+        "feature": "channel_ussd_api",
+        "importance": 0.09752695262432098
+      },
+      {
+        "feature": "txn_max_amount_3d",
+        "importance": 0.09398499131202698
+      },
+      {
+        "feature": "type_transfer_c2c",
+        "importance": 0.09051651507616043
+      },
+      {
+        "feature": "balance_change",
+        "importance": 0.08470038324594498
+      },
+      {
+        "feature": "trx_amt",
+        "importance": 0.05559481680393219
+      },
+      {
+        "feature": "type_transfer_c2b",
+        "importance": 0.0464060939848423
+      },
+      {
+        "feature": "channel_new_jc_app",
+        "importance": 0.04496316239237785
+      },
+      {
+        "feature": "txn_min_amount_3d",
+        "importance": 0.04459621384739876
+      },
+      {
+        "feature": "user_unique_channels_7d",
+        "importance": 0.038764603435993195
+      },
+      {
+        "feature": "user_type_diversity_score_7d",
+        "importance": 0.0369761660695076
+      },
+      {
+        "feature": "start_balance_log",
+        "importance": 0.03131803125143051
+      },
+      {
+        "feature": "is_business_hours",
+        "importance": 0.030297517776489258
+      },
+      {
+        "feature": "txn_multi_channel_recent",
+        "importance": 0.029032671824097633
+      },
+      {
+        "feature": "user_channel_diversity_score_7d",
+        "importance": 0.026143435388803482
+      },
+      {
+        "feature": "txn_amount_deviation_from_avg",
+        "importance": 0.02410610020160675
+      },
+      {
+        "feature": "balance_change_pct",
+        "importance": 0.023528536781668663
+      },
+      {
+        "feature": "user_recipient_concentration_ratio_7d",
+        "importance": 0.021629996597766876
+      },
+      {
+        "feature": "user_avg_time_between_txns_7d",
+        "importance": 0.020594006404280663
+      },
+      {
+        "feature": "hour_of_day",
+        "importance": 0.01925092376768589
+      },
+      {
+        "feature": "txn_avg_amount_3d",
+        "importance": 0.014914195984601974
+      },
+      {
+        "feature": "mbar_year_of_birth",
+        "importance": 0.010358246974647045
+      },
+      {
+        "feature": "is_unusual_hour",
+        "importance": 0.0
+      },
+      {
+        "feature": "is_night",
+        "importance": 0.0
+      },
+      {
+        "feature": "channel_mobile_app",
+        "importance": 0.0
+      },
+      {
+        "feature": "channel_ussd",
+        "importance": 0.0
+      },
+      {
+        "feature": "txn_is_high_activity_3d",
+        "importance": 0.0
+      },
+      {
+        "feature": "type_mobile_load",
+        "importance": 0.0
+      }
+    ],
+    "combined": [
+      {
+        "feature": "trx_amt",
+        "rf_importance": 0.1427165218841288,
+        "xgb_importance": 0.08470038324594498,
+        "avg_importance": 0.1137084525650369
+      },
+      {
+        "feature": "is_business_hours",
+        "rf_importance": 0.09262464778172086,
+        "xgb_importance": 0.114796482026577,
+        "avg_importance": 0.10371056490414893
+      },
+      {
+        "feature": "txn_multi_channel_recent",
+        "rf_importance": 0.15001844982842577,
+        "xgb_importance": 0.05559481680393219,
+        "avg_importance": 0.10280663331617898
+      },
+      {
+        "feature": "channel_ussd_api",
+        "rf_importance": 0.04100992893487833,
+        "xgb_importance": 0.09398499131202698,
+        "avg_importance": 0.06749746012345265
+      },
+      {
+        "feature": "mbar_year_of_birth",
+        "rf_importance": 0.08768699145660726,
+        "xgb_importance": 0.023528536781668663,
+        "avg_importance": 0.05560776411913796
+      },
+      {
+        "feature": "type_mobile_load",
+        "rf_importance": 0.01482212923115022,
+        "xgb_importance": 0.09051651507616043,
+        "avg_importance": 0.05266932215365533
+      },
+      {
+        "feature": "user_recipient_concentration_ratio_7d",
+        "rf_importance": 0.0659934557675799,
+        "xgb_importance": 0.0369761660695076,
+        "avg_importance": 0.05148481091854375
+      },
+      {
+        "feature": "txn_is_high_activity_3d",
+        "rf_importance": 0.07083332995603994,
+        "xgb_importance": 0.03131803125143051,
+        "avg_importance": 0.05107568060373523
+      },
+      {
+        "feature": "start_balance_log",
+        "rf_importance": 0.0025427312286979385,
+        "xgb_importance": 0.09752695262432098,
+        "avg_importance": 0.05003484192650946
+      },
+      {
+        "feature": "txn_amount_deviation_from_avg",
+        "rf_importance": 0.05333547015096528,
+        "xgb_importance": 0.02410610020160675,
+        "avg_importance": 0.038720785176286014
+      },
+      {
+        "feature": "user_channel_diversity_score_7d",
+        "rf_importance": 0.04980470022201073,
+        "xgb_importance": 0.026143435388803482,
+        "avg_importance": 0.0379740678054071
+      },
+      {
+        "feature": "user_avg_time_between_txns_7d",
+        "rf_importance": 0.028103271543506395,
+        "xgb_importance": 0.038764603435993195,
+        "avg_importance": 0.03343393748974979
+      },
+      {
+        "feature": "channel_payment_gateway",
+        "rf_importance": 0.021463133498716192,
+        "xgb_importance": 0.04459621384739876,
+        "avg_importance": 0.03302967367305747
+      },
+      {
+        "feature": "is_night",
+        "rf_importance": 0.011650158650940724,
+        "xgb_importance": 0.04496316239237785,
+        "avg_importance": 0.02830666052165929
+      },
+      {
+        "feature": "user_type_diversity_score_7d",
+        "rf_importance": 0.033030226599372256,
+        "xgb_importance": 0.021629996597766876,
+        "avg_importance": 0.027330111598569566
+      },
+      {
+        "feature": "user_unique_channels_7d",
+        "rf_importance": 0.032847106894983755,
+        "xgb_importance": 0.020594006404280663,
+        "avg_importance": 0.02672055664963221
+      },
+      {
+        "feature": "type_transfer_c2b",
+        "rf_importance": 0.0027067045329783363,
+        "xgb_importance": 0.0464060939848423,
+        "avg_importance": 0.02455639925891032
+      },
+      {
+        "feature": "channel_new_jc_app",
+        "rf_importance": 0.030155988750561285,
+        "xgb_importance": 0.014914195984601974,
+        "avg_importance": 0.02253509236758163
+      },
+      {
+        "feature": "channel_mobile_app",
+        "rf_importance": 0.01376767131965512,
+        "xgb_importance": 0.029032671824097633,
+        "avg_importance": 0.021400171571876375
+      },
+      {
+        "feature": "balance_change_pct",
+        "rf_importance": 0.006227541551641008,
+        "xgb_importance": 0.030297517776489258,
+        "avg_importance": 0.018262529664065132
+      },
+      {
+        "feature": "balance_change",
+        "rf_importance": 0.016641888677643827,
+        "xgb_importance": 0.01925092376768589,
+        "avg_importance": 0.017946406222664857
+      },
+      {
+        "feature": "channel_ussd",
+        "rf_importance": 0.019668147366740503,
+        "xgb_importance": 0.0,
+        "avg_importance": 0.009834073683370251
+      },
+      {
+        "feature": "txn_min_amount_3d",
+        "rf_importance": 0.008584081280008605,
+        "xgb_importance": 0.010358246974647045,
+        "avg_importance": 0.009471164127327826
+      },
+      {
+        "feature": "is_unusual_hour",
+        "rf_importance": 0.003330688341467833,
+        "xgb_importance": 0.0,
+        "avg_importance": 0.0016653441707339164
+      },
+      {
+        "feature": "txn_avg_amount_3d",
+        "rf_importance": 0.00043503454957922105,
+        "xgb_importance": 0.0,
+        "avg_importance": 0.00021751727478961052
+      },
+      {
+        "feature": "hour_of_day",
+        "rf_importance": 0.0,
+        "xgb_importance": 0.0,
+        "avg_importance": 0.0
+      },
+      {
+        "feature": "txn_max_amount_3d",
+        "rf_importance": 0.0,
+        "xgb_importance": 0.0,
+        "avg_importance": 0.0
+      },
+      {
+        "feature": "type_transfer_c2c",
+        "rf_importance": 0.0,
+        "xgb_importance": 0.0,
+        "avg_importance": 0.0
+      }
+    ],
+    "shap": [
+      {
+        "feature": "channel_payment_gateway",
+        "mean_abs_shap": 1.1220725774765015
+      },
+      {
+        "feature": "balance_change",
+        "mean_abs_shap": 0.9518699645996094
+      },
+      {
+        "feature": "trx_amt",
+        "mean_abs_shap": 0.7094050049781799
+      },
+      {
+        "feature": "start_balance_log",
+        "mean_abs_shap": 0.46267855167388916
+      },
+      {
+        "feature": "channel_new_jc_app",
+        "mean_abs_shap": 0.3984672427177429
+      },
+      {
+        "feature": "user_unique_channels_7d",
+        "mean_abs_shap": 0.36723533272743225
+      },
+      {
+        "feature": "is_business_hours",
+        "mean_abs_shap": 0.30681273341178894
+      },
+      {
+        "feature": "user_type_diversity_score_7d",
+        "mean_abs_shap": 0.2544131875038147
+      },
+      {
+        "feature": "balance_change_pct",
+        "mean_abs_shap": 0.2149522453546524
+      },
+      {
+        "feature": "txn_max_amount_3d",
+        "mean_abs_shap": 0.21377147734165192
+      },
+      {
+        "feature": "user_avg_time_between_txns_7d",
+        "mean_abs_shap": 0.19334888458251953
+      },
+      {
+        "feature": "user_channel_diversity_score_7d",
+        "mean_abs_shap": 0.17026294767856598
+      },
+      {
+        "feature": "hour_of_day",
+        "mean_abs_shap": 0.16259412467479706
+      },
+      {
+        "feature": "type_transfer_c2c",
+        "mean_abs_shap": 0.15701523423194885
+      },
+      {
+        "feature": "txn_multi_channel_recent",
+        "mean_abs_shap": 0.13861601054668427
+      },
+      {
+        "feature": "txn_amount_deviation_from_avg",
+        "mean_abs_shap": 0.12554432451725006
+      },
+      {
+        "feature": "txn_avg_amount_3d",
+        "mean_abs_shap": 0.09537658095359802
+      },
+      {
+        "feature": "user_recipient_concentration_ratio_7d",
+        "mean_abs_shap": 0.0903259664773941
+      },
+      {
+        "feature": "txn_min_amount_3d",
+        "mean_abs_shap": 0.07028116285800934
+      },
+      {
+        "feature": "type_transfer_c2b",
+        "mean_abs_shap": 0.04503709450364113
+      },
+      {
+        "feature": "mbar_year_of_birth",
+        "mean_abs_shap": 0.042564548552036285
+      },
+      {
+        "feature": "channel_ussd_api",
+        "mean_abs_shap": 0.01901763677597046
+      },
+      {
+        "feature": "is_unusual_hour",
+        "mean_abs_shap": 0.0
+      },
+      {
+        "feature": "is_night",
+        "mean_abs_shap": 0.0
+      },
+      {
+        "feature": "channel_mobile_app",
+        "mean_abs_shap": 0.0
+      },
+      {
+        "feature": "channel_ussd",
+        "mean_abs_shap": 0.0
+      },
+      {
+        "feature": "txn_is_high_activity_3d",
+        "mean_abs_shap": 0.0
+      },
+      {
+        "feature": "type_mobile_load",
+        "mean_abs_shap": 0.0
+      }
+    ]
+  },
+  "model_performance": {
+    "random_forest_auc": 0.9121315192743764,
+    "xgboost_auc": 0.9325396825396826
+  },
+  "thresholds": {
+    "variance_threshold": 0.01,
+    "correlation_threshold": 0.9,
+    "vif_threshold": 10
+  }
+}

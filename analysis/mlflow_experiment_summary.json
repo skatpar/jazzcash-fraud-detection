@@ -1,0 +1,13 @@
+{
+  "experiment_name": "fraud-detection-feature-engineering",
+  "experiment_id": "440293988637387331",
+  "total_runs": 12,
+  "runs_by_stage": {
+    "feature_selection": 4,
+    "interpretability": 2,
+    "model_training": 2,
+    "sampling": 4
+  },
+  "tracking_uri": "file:///root/research-dir/dev/jazzcash-fraud-detection/mlruns",
+  "timestamp": "2025-10-27T15:42:24.437930"
+}

@@ -1,0 +1,32 @@
+# Recommended Features for Fraud Detection Model
+# Generated: 2025-10-27 15:37:04.056807
+# Total Features: 28
+
+1. trx_amt
+2. is_business_hours
+3. txn_multi_channel_recent
+4. channel_ussd_api
+5. mbar_year_of_birth
+6. type_mobile_load
+7. user_recipient_concentration_ratio_7d
+8. txn_is_high_activity_3d
+9. start_balance_log
+10. txn_amount_deviation_from_avg
+11. user_channel_diversity_score_7d
+12. user_avg_time_between_txns_7d
+13. channel_payment_gateway
+14. is_night
+15. user_type_diversity_score_7d
+16. user_unique_channels_7d
+17. type_transfer_c2b
+18. channel_new_jc_app
+19. channel_mobile_app
+20. balance_change_pct
+21. balance_change
+22. channel_ussd
+23. txn_min_amount_3d
+24. is_unusual_hour
+25. txn_avg_amount_3d
+26. hour_of_day
+27. txn_max_amount_3d
+28. type_transfer_c2c
