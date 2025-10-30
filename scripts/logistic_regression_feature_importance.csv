@@ -1,0 +1,68 @@
+Feature,Feature_Name,Coefficient,Abs_Coefficient
+user_peak_hour_txns_7d,User Peak Hour Transactions (7 Days),-1.0145382539180179,1.0145382539180179
+type_mobile_load,Mobile Top-up Transaction,-0.8843195318191213,0.8843195318191213
+user_total_txns_7d,User Total Transactions (7 Days),-0.8109649357707369,0.8109649357707369
+trx_amt,Transaction Amount (PKR),0.7134081040027337,0.7134081040027337
+channel_mobile_app,Uses Mobile App,-0.6154775413341572,0.6154775413341572
+user_total_txns_3d,User Total Transactions (3 Days),0.5831719598710213,0.5831719598710213
+txn_txns_3d,Transaction Count (Last 3 Days),0.5831719598710213,0.5831719598710213
+txn_avg_amount_3d,Average Transaction Amount (3 Days),-0.5623735932588084,0.5623735932588084
+channel_payment_gateway,Uses Payment Gateway,0.5342087254937751,0.5342087254937751
+type_transfer_c2c,Customer-to-Customer Transfer,0.5211861210233155,0.5211861210233155
+channel_ussd_api,Uses USSD API Channel,-0.4928159827749577,0.4928159827749577
+channel_new_jc_app,Uses New JazzCash App,-0.4888313642380122,0.4888313642380122
+start_balance,Account Balance Before Transaction,-0.4782906407444654,0.4782906407444654
+user_unique_recipients_3d,User Unique Recipients (3 Days),-0.44448123594750366,0.44448123594750366
+txn_unique_recipients_3d,Unique Recipients Count (3 Days),-0.44448123594750366,0.44448123594750366
+user_median_amount_3d,User Median Amount (3 Days),0.4401069909721954,0.4401069909721954
+user_off_peak_hour_txns_7d,User Off-Peak Transactions (7 Days),-0.391036353689314,0.391036353689314
+is_business_hours,Business Hours Transaction Flag,0.37808213998556855,0.37808213998556855
+channel_ussd,Uses USSD Channel,-0.3650598026854607,0.3650598026854607
+user_min_amount_3d,User Minimum Amount (3 Days),-0.3230005902572344,0.3230005902572344
+user_channel_diversity_score_7d,User Channel Diversity Score,0.31324271740963483,0.31324271740963483
+txn_night_txns_3d,Night Transactions Count (3 Days),-0.3092184427150899,0.3092184427150899
+txn_min_amount_3d,Minimum Transaction Amount (3 Days),0.3008669160276515,0.3008669160276515
+user_unique_recipients_7d,User Unique Recipients (7 Days),-0.2982827551720269,0.2982827551720269
+txn_weekend_txns_3d,Weekend Transactions Count (3 Days),-0.2705516268837228,0.2705516268837228
+is_weekend,Weekend Transaction Flag,0.25970238742219326,0.25970238742219326
+txn_max_amount_3d,Maximum Transaction Amount (3 Days),0.2570702491578761,0.2570702491578761
+user_total_amount_3d,User Total Amount (3 Days),-0.2531823995215028,0.2531823995215028
+user_unique_types_3d,User Unique Types (3 Days),0.22852524069206312,0.22852524069206312
+txn_unique_types_3d,Unique Transaction Types (3 Days),0.22852524069206312,0.22852524069206312
+user_txn_frequency_score_7d,User Transaction Frequency Score,0.22796350243177974,0.22796350243177974
+txn_multi_channel_recent,Multiple Channels Used Recently Flag,-0.2264765849272866,0.2264765849272866
+user_type_diversity_score_7d,User Transaction Type Diversity,0.223968082890757,0.223968082890757
+day_of_week,"Day of Week (1=Mon, 7=Sun)",-0.21768723534399756,0.21768723534399756
+user_median_amount_7d,User Median Amount (7 Days),-0.20721224445180206,0.20721224445180206
+user_unique_channels_7d,User Unique Channels (7 Days),-0.17495141482643575,0.17495141482643575
+user_avg_amount_per_recipient_7d,User Avg Amount per Recipient,-0.17266952494506652,0.17266952494506652
+txn_total_amount_3d,Total Amount Transacted (3 Days),0.16977817966918543,0.16977817966918543
+user_max_amount_3d,User Maximum Amount (3 Days),0.14830644879094446,0.14830644879094446
+user_avg_time_between_txns_7d,User Avg Time Between Transactions,-0.13170724451775007,0.13170724451775007
+user_weekend_txns_7d,User Weekend Transactions (7 Days),0.12544384541193535,0.12544384541193535
+txn_unique_channels_3d,Unique Channels Used (3 Days),-0.12356060470089719,0.12356060470089719
+user_unique_channels_3d,User Unique Channels (3 Days),-0.12356060470089719,0.12356060470089719
+type_transfer_c2b,Customer-to-Business Transfer,0.11613872065932378,0.11613872065932378
+start_balance_log,Log(Account Balance),-0.11201981794984592,0.11201981794984592
+hour_of_day,Hour of Transaction (0-23),-0.094366727796909,0.094366727796909
+user_recipient_concentration_ratio_7d,User Recipient Concentration,-0.07538684462667297,0.07538684462667297
+user_total_amount_7d,User Total Amount (7 Days),-0.06707281008470378,0.06707281008470378
+user_min_amount_7d,User Minimum Amount (7 Days),0.0601017979891226,0.0601017979891226
+user_min_balance_7d,User Minimum Balance (7 Days),0.058999214144587274,0.058999214144587274
+night_weekend_combo,Night+Weekend Transaction Flag,-0.058600419696431545,0.058600419696431545
+user_avg_start_balance_7d,User Average Starting Balance,0.057036079235056,0.057036079235056
+user_avg_amount_7d,User Average Amount (7 Days),0.057036079235056,0.057036079235056
+user_avg_end_balance_7d,User Average Ending Balance,0.05615809062819765,0.05615809062819765
+txn_is_high_activity_3d,High Activity Period Flag,-0.04580855591441036,0.04580855591441036
+is_unusual_hour,Unusual Time Transaction Flag,-0.04521620668648631,0.04521620668648631
+user_balance_volatility_7d,User Balance Volatility,-0.03015289557154399,0.03015289557154399
+user_unique_types_7d,User Unique Types (7 Days),-0.029471890806098577,0.029471890806098577
+user_avg_amount_3d,User Average Amount (3 Days),-0.027571099321814868,0.027571099321814868
+user_night_txns_7d,User Night Transactions (7 Days),0.011426755245971686,0.011426755245971686
+txn_amount_deviation_from_avg,Amount Deviation from User Average,-0.008841088738176628,0.008841088738176628
+user_max_amount_7d,User Maximum Amount (7 Days),0.00859199966606238,0.00859199966606238
+is_night,Night Hours Transaction Flag,0.00842913131911048,0.00842913131911048
+user_max_balance_7d,User Maximum Balance (7 Days),0.00802780588378213,0.00802780588378213
+user_max_amount_to_single_recipient_7d,User Max Amount to One Recipient,0.005078605496130566,0.005078605496130566
+type_bill_payment,Bill Payment Transaction,0.0,0.0
+user_days_since_last_txn,Days Since User Last Transaction,0.0,0.0

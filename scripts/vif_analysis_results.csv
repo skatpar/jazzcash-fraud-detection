@@ -1,0 +1,49 @@
+Feature,VIF,Feature_Name,Interpretation
+user_avg_amount_7d,999.99,User Average Amount (7 Days),🔴 Severe
+user_max_amount_7d,999.99,User Maximum Amount (7 Days),🔴 Severe
+user_min_amount_7d,999.99,User Minimum Amount (7 Days),🔴 Severe
+user_avg_end_balance_7d,999.99,User Average Ending Balance,🔴 Severe
+user_avg_start_balance_7d,999.99,User Average Starting Balance,🔴 Severe
+user_max_amount_to_single_recipient_7d,999.99,User Max Amount to One Recipient,🔴 Severe
+user_max_balance_7d,999.99,User Maximum Balance (7 Days),🔴 Severe
+user_min_balance_7d,999.99,User Minimum Balance (7 Days),🔴 Severe
+type_bill_payment,999.99,Bill Payment Transaction,🔴 Severe
+user_balance_volatility_7d,114.09333698212231,User Balance Volatility,🔴 Severe
+user_avg_amount_3d,66.05687607645903,User Average Amount (3 Days),🔴 Severe
+user_median_amount_7d,35.607271111855525,User Median Amount (7 Days),🔴 Severe
+user_median_amount_3d,22.8045413575133,User Median Amount (3 Days),🔴 Severe
+user_avg_amount_per_recipient_7d,21.046859715345214,User Avg Amount per Recipient,🔴 Severe
+user_max_amount_3d,16.18182656438015,User Maximum Amount (3 Days),🔴 Severe
+txn_avg_amount_3d,14.493760620994282,Average Transaction Amount (3 Days),🔴 Severe
+hour_of_day,11.954018121667195,Hour of Transaction (0-23),🔴 Severe
+user_total_amount_3d,11.917206068543127,User Total Amount (3 Days),🔴 Severe
+day_of_week,11.510604259710119,"Day of Week (1=Mon, 7=Sun)",🔴 Severe
+user_type_diversity_score_7d,11.49661343367054,User Transaction Type Diversity,🔴 Severe
+user_total_amount_7d,11.481439262835979,User Total Amount (7 Days),🔴 Severe
+user_min_amount_3d,11.102073279089797,User Minimum Amount (3 Days),🔴 Severe
+start_balance_log,10.52883488183281,Log(Account Balance),🔴 Severe
+channel_new_jc_app,9.151635146499233,Uses New JazzCash App,🟠 High
+txn_max_amount_3d,8.068775483300769,Maximum Transaction Amount (3 Days),🟠 High
+user_channel_diversity_score_7d,7.491103530000028,User Channel Diversity Score,🟠 High
+txn_min_amount_3d,5.133879615689857,Minimum Transaction Amount (3 Days),🟠 High
+user_recipient_concentration_ratio_7d,4.883144971902939,User Recipient Concentration,🟡 Moderate
+is_weekend,3.945217446061655,Weekend Transaction Flag,🟡 Moderate
+is_unusual_hour,3.5179201896730974,Unusual Time Transaction Flag,🟡 Moderate
+channel_payment_gateway,3.4186241503227475,Uses Payment Gateway,🟡 Moderate
+is_night,3.0867571064595993,Night Hours Transaction Flag,🟡 Moderate
+txn_multi_channel_recent,2.9567486995068695,Multiple Channels Used Recently Flag,🟡 Moderate
+channel_mobile_app,2.8022161886999313,Uses Mobile App,🟡 Moderate
+type_mobile_load,2.7826344436614465,Mobile Top-up Transaction,🟡 Moderate
+is_business_hours,2.765561354749409,Business Hours Transaction Flag,🟡 Moderate
+type_transfer_c2c,2.5885971717430234,Customer-to-Customer Transfer,🟡 Moderate
+channel_ussd,2.4198691169913853,Uses USSD Channel,🟡 Moderate
+txn_total_amount_3d,2.400571503783033,Total Amount Transacted (3 Days),🟡 Moderate
+channel_ussd_api,2.3330057632541514,Uses USSD API Channel,🟡 Moderate
+txn_is_high_activity_3d,2.0905098150200034,High Activity Period Flag,🟡 Moderate
+user_avg_time_between_txns_7d,1.9586978432612137,User Avg Time Between Transactions,🟢 Low
+start_balance,1.9322764113574464,Account Balance Before Transaction,🟢 Low
+night_weekend_combo,1.7913828476269709,Night+Weekend Transaction Flag,🟢 Low
+type_transfer_c2b,1.758950648788266,Customer-to-Business Transfer,🟢 Low
+user_txn_frequency_score_7d,1.553701734318573,User Transaction Frequency Score,🟢 Low
+trx_amt,1.506471604916032,Transaction Amount (PKR),🟢 Low
+txn_amount_deviation_from_avg,1.0202368711082919,Amount Deviation from User Average,🟢 Low
