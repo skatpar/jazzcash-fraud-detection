@@ -1,0 +1,7 @@
+2025-11-03 15:21:36,702 - spark_inference - INFO - ✅ Libraries imported successfully
+2025-11-03 15:21:36,703 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251103_152136.log
+2025-11-03 15:21:36,703 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/models/spark_lr_model_2
+2025-11-03 15:21:36,703 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...
+2025-11-03 15:21:44,282 - spark_inference - INFO - ✅ Spark Session initialized
+2025-11-03 15:21:44,282 - spark_inference - INFO - 📦 Loading trained model from: /root/research-dir/dev/jazzcash-fraud-detection/models/spark_lr_model_2
+2025-11-03 15:21:45,490 - spark_inference - ERROR - ❌ Error loading model: [PATH_NOT_FOUND] Path does not exist: file:/root/research-dir/dev/jazzcash-fraud-detection/models/spark_lr_model_2/metadata. SQLSTATE: 42K03

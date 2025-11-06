@@ -1,0 +1,19 @@
+2025-11-05 14:06:54,214 - spark_training - INFO - ✅ Libraries imported successfully
+2025-11-05 14:06:54,215 - spark_training - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_training_20251105_140654.log
+2025-11-05 14:07:03,325 - spark_training - INFO - 📦 Caching DataFrame in memory...
+2025-11-05 14:07:03,826 - spark_training - INFO - ⏳ Counting rows (this triggers data loading)...
+2025-11-05 14:10:32,358 - spark_training - ERROR - ❌ ERROR LOADING DATA!
+2025-11-05 14:10:32,359 - spark_training - ERROR - Error: An error occurred while calling o58.count
+2025-11-05 14:10:32,361 - spark_training - ERROR - Traceback: Traceback (most recent call last):
+  File "/root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_training_ali.py", line 223, in <module>
+    total_rows = df.count()
+  File "/root/miniconda3/envs/fraud/lib/python3.10/site-packages/pyspark/sql/classic/dataframe.py", line 439, in count
+    return int(self._jdf.count())
+  File "/root/miniconda3/envs/fraud/lib/python3.10/site-packages/py4j/java_gateway.py", line 1362, in __call__
+    return_value = get_return_value(
+  File "/root/miniconda3/envs/fraud/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 282, in deco
+    return f(*a, **kw)
+  File "/root/miniconda3/envs/fraud/lib/python3.10/site-packages/py4j/protocol.py", line 335, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o58.count
+

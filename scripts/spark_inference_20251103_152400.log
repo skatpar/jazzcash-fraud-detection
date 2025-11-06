@@ -1,0 +1,13 @@
+2025-11-03 15:24:00,951 - spark_inference - INFO - ✅ Libraries imported successfully
+2025-11-03 15:24:00,951 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251103_152400.log
+2025-11-03 15:24:00,951 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-03 15:24:00,951 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...
+2025-11-03 15:24:08,487 - spark_inference - INFO - ✅ Spark Session initialized
+2025-11-03 15:24:08,487 - spark_inference - INFO - 📦 Loading trained model from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-03 15:24:15,712 - spark_inference - INFO - ✅ Model loaded successfully
+2025-11-03 15:24:15,712 - spark_inference - INFO -    • Model intercept: -10.376682
+2025-11-03 15:24:15,743 - spark_inference - INFO -    • Number of features: 290
+2025-11-03 15:24:15,744 - spark_inference - INFO - 📊 Loading inference data from ClickHouse...
+2025-11-03 15:24:16,914 - spark_inference - INFO - 📦 Caching inference DataFrame...
+2025-11-03 15:27:45,567 - spark_inference - ERROR - ❌ ERROR LOADING INFERENCE DATA!
+2025-11-03 15:27:45,567 - spark_inference - ERROR - Error: An error occurred while calling o106.count

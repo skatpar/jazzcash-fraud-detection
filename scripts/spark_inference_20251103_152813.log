@@ -1,0 +1,30 @@
+2025-11-03 15:28:13,863 - spark_inference - INFO - ✅ Libraries imported successfully
+2025-11-03 15:28:13,863 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251103_152813.log
+2025-11-03 15:28:13,863 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-03 15:28:13,863 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...
+2025-11-03 15:28:20,529 - spark_inference - INFO - ✅ Spark Session initialized
+2025-11-03 15:28:20,530 - spark_inference - INFO - 📦 Loading trained model from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-03 15:28:26,189 - spark_inference - INFO - ✅ Model loaded successfully
+2025-11-03 15:28:26,190 - spark_inference - INFO -    • Model intercept: -10.376682
+2025-11-03 15:28:26,214 - spark_inference - INFO -    • Number of features: 290
+2025-11-03 15:28:26,214 - spark_inference - INFO - 📊 Loading inference data from ClickHouse...
+2025-11-03 15:28:26,808 - spark_inference - INFO - 📦 Caching inference DataFrame...
+2025-11-03 16:06:41,862 - spark_inference - ERROR - ❌ ERROR LOADING INFERENCE DATA!
+2025-11-03 16:06:41,973 - spark_inference - ERROR - Error: An error occurred while calling o106.count.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 58 in stage 4.0 failed 4 times, most recent failure: Lost task 58.3 in stage 4.0 (TID 219) (10.205.161.118 executor 1172): ExecutorLostFailure (executor 1172 exited caused by one of the running tasks) Reason: Command exited with code 137
+Driver stacktrace:
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$3(DAGScheduler.scala:2935)
+	at scala.Option.getOrElse(Option.scala:201)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2(DAGScheduler.scala:2935)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2$adapted(DAGScheduler.scala:2927)
+	at scala.collection.immutable.List.foreach(List.scala:334)
+	at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:2927)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1(DAGScheduler.scala:1295)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1$adapted(DAGScheduler.scala:1295)
+	at scala.Option.foreach(Option.scala:437)
+	at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:1295)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:3207)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:3141)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:3130)
+	at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:50)
+

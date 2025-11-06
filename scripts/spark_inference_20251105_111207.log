@@ -1,0 +1,13 @@
+2025-11-05 11:12:07,376 - spark_inference - INFO - ✅ Logging configured
+2025-11-05 11:12:07,377 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251105_111207.log
+2025-11-05 11:12:07,385 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-05 11:12:07,410 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...
+2025-11-05 11:12:21,200 - spark_inference - INFO - ✅ Spark Session initialized
+2025-11-05 11:12:21,212 - spark_inference - INFO - 📦 Loading trained model from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-05 11:12:27,953 - spark_inference - INFO - ✅ Model loaded successfully
+2025-11-05 11:12:27,956 - spark_inference - INFO -    • Model intercept: -10.376682
+2025-11-05 11:12:27,993 - spark_inference - INFO -    • Number of features: 290
+2025-11-05 11:12:28,021 - spark_inference - INFO - 📊 Loading inference data from ClickHouse...
+2025-11-05 11:12:41,712 - spark_inference - INFO - 📦 Caching inference DataFrame...
+2025-11-05 11:21:07,656 - spark_inference - INFO - 🔧 Preprocessing features for inference...
+2025-11-05 11:21:07,661 - spark_inference - INFO - 🔤 String features to encode: ['trx_channel', 'trx_type', 'mbar_registered_channel', 'mbar_a_c_status', 'mbar_a_c_level', 'mbar_account_type_name', 'user_most_used_channel_7d', 'user_last_used_channel', 'user_most_used_type_7d', 'user_last_used_type']

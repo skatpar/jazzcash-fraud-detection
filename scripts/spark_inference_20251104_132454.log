@@ -1,0 +1,4 @@
+2025-11-04 13:24:54,824 - spark_inference - INFO - ✅ Libraries imported successfully
+2025-11-04 13:24:54,824 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251104_132454.log
+2025-11-04 13:24:54,824 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-04 13:24:54,824 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...

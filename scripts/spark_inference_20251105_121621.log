@@ -1,0 +1,11 @@
+2025-11-05 12:16:21,259 - spark_inference - INFO - ✅ Logging configured
+2025-11-05 12:16:21,260 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251105_121621.log
+2025-11-05 12:16:21,274 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-05 12:16:21,608 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...
+2025-11-05 12:16:26,083 - spark_inference - INFO - ✅ Spark Session initialized
+2025-11-05 12:16:26,095 - spark_inference - INFO - 📦 Loading trained model from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-05 12:16:29,866 - spark_inference - INFO - ✅ Model loaded successfully
+2025-11-05 12:16:29,868 - spark_inference - INFO -    • Model intercept: -10.376682
+2025-11-05 12:16:29,888 - spark_inference - INFO -    • Number of features: 290
+2025-11-05 12:16:31,396 - spark_inference - INFO - 📊 Loading inference data from ClickHouse...
+2025-11-05 12:16:43,125 - spark_inference - INFO - 📦 Materializing and caching inference DataFrame...

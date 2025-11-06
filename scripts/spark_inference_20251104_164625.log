@@ -1,0 +1,19 @@
+2025-11-04 16:46:25,851 - spark_inference - INFO - ✅ Libraries imported successfully
+2025-11-04 16:46:25,851 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251104_164625.log
+2025-11-04 16:46:25,851 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-04 16:46:25,852 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...
+2025-11-04 16:46:36,748 - spark_inference - INFO - ✅ Spark Session initialized
+2025-11-04 16:46:36,749 - spark_inference - INFO - 📦 Loading trained model from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-04 16:46:48,794 - spark_inference - INFO - ✅ Model loaded successfully
+2025-11-04 16:46:48,794 - spark_inference - INFO -    • Model intercept: -10.376682
+2025-11-04 16:46:48,826 - spark_inference - INFO -    • Number of features: 290
+2025-11-04 16:46:48,826 - spark_inference - INFO - 📊 Loading inference data from ClickHouse...
+2025-11-04 16:46:49,784 - spark_inference - INFO - 📦 Caching inference DataFrame...
+2025-11-04 17:10:02,749 - spark_inference - INFO - ✅ Inference data loaded: 280,584,752 records
+2025-11-04 17:10:02,881 - spark_inference - INFO - 🔧 Preprocessing features for inference...
+2025-11-04 17:10:03,391 - spark_inference - INFO - 🔤 String features to encode: ['trx_channel', 'trx_type', 'mbar_registered_channel', 'mbar_a_c_status', 'mbar_a_c_level', 'mbar_account_type_name', 'user_most_used_channel_7d', 'user_last_used_channel', 'user_most_used_type_7d', 'user_last_used_type']
+2025-11-04 17:28:14,881 - spark_inference - INFO - 🧮 Features for inference: 76 features
+2025-11-04 17:28:14,967 - spark_inference - INFO - 📏 Creating feature vectors...
+2025-11-04 17:53:46,408 - spark_inference - INFO - ✅ Feature scaling completed
+2025-11-04 17:53:46,415 - spark_inference - INFO - 🔮 Running inference on test data...
+2025-11-04 17:53:46,868 - spark_inference - INFO - ✅ Inference completed in 0.44 seconds

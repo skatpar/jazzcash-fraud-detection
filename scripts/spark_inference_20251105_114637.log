@@ -1,0 +1,54 @@
+2025-11-05 11:46:37,137 - spark_inference - INFO - ✅ Logging configured
+2025-11-05 11:46:37,138 - spark_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_inference_20251105_114637.log
+2025-11-05 11:46:37,147 - spark_inference - INFO - 🔧 Model path: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-05 11:46:37,158 - spark_inference - INFO - 🚀 Initializing Spark Session for inference...
+2025-11-05 11:46:47,013 - spark_inference - INFO - ✅ Spark Session initialized
+2025-11-05 11:46:47,024 - spark_inference - INFO - 📦 Loading trained model from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_2
+2025-11-05 11:46:52,567 - spark_inference - INFO - ✅ Model loaded successfully
+2025-11-05 11:46:52,569 - spark_inference - INFO -    • Model intercept: -10.376682
+2025-11-05 11:46:52,597 - spark_inference - INFO -    • Number of features: 290
+2025-11-05 11:46:52,618 - spark_inference - INFO - 📊 Loading inference data from ClickHouse...
+2025-11-05 11:47:04,493 - spark_inference - INFO - 📦 Materializing and caching inference DataFrame...
+2025-11-05 11:47:18,046 - spark_inference - INFO - 🔧 Preprocessing features for inference...
+2025-11-05 11:47:18,094 - spark_inference - INFO - 🔤 String features to encode: ['trx_channel', 'trx_type', 'mbar_registered_channel', 'mbar_a_c_status', 'mbar_a_c_level', 'mbar_account_type_name', 'user_most_used_channel_7d', 'user_last_used_channel', 'user_most_used_type_7d', 'user_last_used_type']
+2025-11-05 11:47:18,102 - spark_inference - INFO - 🧹 Cleaning string columns...
+2025-11-05 11:47:52,401 - spark_inference - INFO - 🔤 Building optimized categorical encoding pipeline...
+2025-11-05 11:47:52,403 - spark_inference - INFO - Processing 10 string columns: ['trx_channel', 'trx_type', 'mbar_registered_channel', 'mbar_a_c_status', 'mbar_a_c_level', 'mbar_account_type_name', 'user_most_used_channel_7d', 'user_last_used_channel', 'user_most_used_type_7d', 'user_last_used_type']
+2025-11-05 11:47:52,471 - spark_inference - INFO - 🔧 Fitting string indexers...
+2025-11-05 11:47:57,942 - spark_inference - INFO - ✅ String indexing completed and checkpointed
+2025-11-05 11:47:57,943 - spark_inference - INFO - 🔧 Fitting one-hot encoders...
+2025-11-05 11:47:58,816 - spark_inference - INFO - ✅ One-hot encoding completed and checkpointed
+2025-11-05 11:47:58,834 - spark_inference - INFO - 🧮 Features for inference: 77 features
+2025-11-05 11:47:58,841 - spark_inference - INFO - 📏 Creating feature vectors...
+2025-11-05 11:47:58,906 - spark_inference - INFO - 📊 Resource usage monitoring...
+2025-11-05 11:47:58,908 - spark_inference - INFO - 📈 DataFrame info:
+2025-11-05 11:47:58,920 - spark_inference - INFO -    • Partitions: 9
+2025-11-05 11:47:58,921 - spark_inference - INFO -    • Columns: 102
+2025-11-05 11:47:58,922 - spark_inference - INFO -    • Cached: False
+2025-11-05 11:47:58,922 - spark_inference - INFO - 🧮 Feature statistics:
+2025-11-05 11:47:58,923 - spark_inference - INFO -    • Total modeling features: 77
+2025-11-05 11:47:58,923 - spark_inference - INFO -    • String columns processed: 10
+2025-11-05 11:47:58,924 - spark_inference - INFO -    • Numeric columns: 67
+2025-11-05 11:47:58,926 - spark_inference - INFO - 💾 Storage info: Serialized 1x Replicated
+2025-11-05 11:47:58,934 - spark_inference - INFO - 🔍 Validating feature count against trained model...
+2025-11-05 11:47:58,936 - spark_inference - INFO -    • Expected features (from model): 290
+2025-11-05 11:47:58,936 - spark_inference - INFO -    • Actual features (inference): 77
+2025-11-05 11:47:58,937 - spark_inference - ERROR - ❌ FEATURE MISMATCH DETECTED!
+2025-11-05 11:47:58,938 - spark_inference - ERROR -    • Model trained on: 290 features
+2025-11-05 11:47:58,938 - spark_inference - ERROR -    • Inference data has: 77 features
+2025-11-05 11:47:58,939 - spark_inference - ERROR -    • Difference: -213
+2025-11-05 11:47:58,939 - spark_inference - INFO - 🔧 Debugging information:
+2025-11-05 11:47:58,940 - spark_inference - INFO -    • String columns: ['trx_channel', 'trx_type', 'mbar_registered_channel', 'mbar_a_c_status', 'mbar_a_c_level', 'mbar_account_type_name', 'user_most_used_channel_7d', 'user_last_used_channel', 'user_most_used_type_7d', 'user_last_used_type']
+2025-11-05 11:47:58,941 - spark_inference - INFO -    • Excluded columns: ['fraud_flag', 'processed_date', 'ac_from', 'ac_to', 'msisdn_from', 'msisdn_to', 'transaction_uuid', 'trans_id']
+2025-11-05 11:47:58,986 - spark_inference - INFO -    • Total columns in data: 82
+2025-11-05 11:47:58,987 - spark_inference - INFO - 📋 First 10 modeling features:
+2025-11-05 11:47:58,987 - spark_inference - INFO -     1. trx_channel_ohe
+2025-11-05 11:47:58,988 - spark_inference - INFO -     2. trx_type_ohe
+2025-11-05 11:47:58,988 - spark_inference - INFO -     3. start_balance
+2025-11-05 11:47:58,989 - spark_inference - INFO -     4. trx_amt
+2025-11-05 11:47:58,989 - spark_inference - INFO -     5. mbar_registered_channel_ohe
+2025-11-05 11:47:58,990 - spark_inference - INFO -     6. mbar_a_c_status_ohe
+2025-11-05 11:47:58,990 - spark_inference - INFO -     7. mbar_a_c_level_ohe
+2025-11-05 11:47:58,991 - spark_inference - INFO -     8. mbar_account_type_name_ohe
+2025-11-05 11:47:58,991 - spark_inference - INFO -     9. hour_of_day
+2025-11-05 11:47:58,991 - spark_inference - INFO -    10. day_of_week

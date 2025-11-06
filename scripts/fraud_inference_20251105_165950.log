@@ -1,0 +1,10 @@
+2025-11-05 16:59:50,754 - fraud_inference - INFO - ✅ Fraud Inference Engine initialized
+2025-11-05 16:59:50,754 - fraud_inference - INFO - 📝 Logging to file: /root/research-dir/dev/jazzcash-fraud-detection/scripts/fraud_inference_20251105_165950.log
+2025-11-05 16:59:54,863 - fraud_inference - INFO - ✅ Spark session created for inference
+2025-11-05 16:59:55,033 - fraud_inference - INFO - 📦 Loading trained model and preprocessing components...
+2025-11-05 16:59:55,033 - fraud_inference - INFO -    • Loading model from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/spark_lr_model_june_v2
+2025-11-05 16:59:59,342 - fraud_inference - INFO -    • Loading preprocessing components from: /root/research-dir/dev/jazzcash-fraud-detection/scripts/preprocessing_components_june
+2025-11-05 17:00:06,831 - fraud_inference - INFO - ✅ All components loaded successfully!
+2025-11-05 17:00:06,831 - fraud_inference - INFO -    • Model: Logistic Regression
+2025-11-05 17:00:06,831 - fraud_inference - INFO -    • Features: 77
+2025-11-05 17:00:06,831 - fraud_inference - INFO -    • Training date: 2025-11-05 16:36:19
