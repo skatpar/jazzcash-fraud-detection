@@ -2,3 +2,29 @@ data
 mlruns
 scripts/__pycache__/
 airflow
+utils
+models
+analysis
+conf
+
+# Large CSV files and Spark outputs
+*.csv
+scripts/*.csv
+scripts/**/*.csv
+scripts/joined_fraud_data.csv/
+scripts/distinct_joined_data.csv/
+
+# Log files
+*.log
+scripts/*.log
+
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
