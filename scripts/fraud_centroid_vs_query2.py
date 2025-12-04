@@ -125,7 +125,6 @@ class FraudCentroidVsQuery:
         AND cutoff_date >= '{start_date}' 
         AND cutoff_date <= '{end_date}'
         """
-        # AND trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000
         
         return self.spark.sql(query)
     
@@ -142,8 +141,11 @@ class FraudCentroidVsQuery:
         
         return self.spark.sql(query)
     
-    def vectorize_and_scale(self, df):
-        """Convert features to vectors and scale."""
+    def vectorize(self, df):
+        """Convert features to vectors."""
+        # Count rows before vectorization
+        initial_count = df.count()
+        
         assembler = VectorAssembler(
             inputCols=self.FEATURE_COLS,
             outputCol="features_raw",
@@ -151,17 +153,24 @@ class FraudCentroidVsQuery:
         )
         df = assembler.transform(df)
         
-        # Scale (without centering to preserve centroid meaning)
+        # Count rows after vectorization and log if any were dropped
+        final_count = df.count()
+        if final_count < initial_count:
+            dropped = initial_count - final_count
+            self.logger.warning(f"⚠️  {dropped:,} rows dropped due to null/invalid feature values")
+        
+        return df
+    
+    def fit_scaler(self, combined_df):
+        """Fit scaler on combined fraud + target data to avoid data leakage."""
         scaler = StandardScaler(
             inputCol="features_raw",
             outputCol="features",
             withStd=True,
             withMean=False
         )
-        scaler_model = scaler.fit(df)
-        df = scaler_model.transform(df)
-        
-        return df, scaler_model
+        scaler_model = scaler.fit(combined_df)
+        return scaler_model
     
     def calculate_fraud_centroid(self, fraud_df):
         """Calculate the mean vector (centroid) of fraud transactions."""
@@ -184,14 +193,19 @@ class FraudCentroidVsQuery:
         """Compute cosine similarities for all transactions."""
         self.logger.info("⏳ Computing cosine similarities...")
         
+        # Broadcast centroid for better performance across executors
+        centroid_broadcast = self.spark.sparkContext.broadcast(centroid_array)
+        centroid_norm_broadcast = self.spark.sparkContext.broadcast(centroid_norm)
+        
         def cosine_sim(features):
             if features is None:
                 return 0.0
             arr = features.toArray()
             norm = np.linalg.norm(arr)
-            if norm == 0 or centroid_norm == 0:
+            c_norm = centroid_norm_broadcast.value
+            if norm == 0 or c_norm == 0:
                 return 0.0
-            return float(np.dot(arr, centroid_array) / (norm * centroid_norm))
+            return float(np.dot(arr, centroid_broadcast.value) / (norm * c_norm))
         
         from pyspark.sql.functions import udf
         
@@ -269,14 +283,25 @@ class FraudCentroidVsQuery:
         self.logger.info("\n" + "=" * 100)
     
     def save_results(self, result_df, output_path):
-        """Save results to CSV."""
-        # Select relevant columns and convert to Pandas for CSV export
-        result_pdf = result_df.select(
+        """Save results to CSV using Spark native writer to avoid OOM."""
+        # Use Spark's native CSV writer instead of toPandas() to handle large datasets
+        output_dir = output_path.replace('.csv', '_temp')
+        
+        result_df.select(
             'trans_id', 'cutoff_date', 'trx_amt', 'trx_channel', 'trx_type', 
             'fraud_flag', 'cosine_similarity'
-        ).toPandas()
-        result_pdf.to_csv(output_path, index=False)
-        self.logger.info(f"\n💾 Full results saved to: {output_path}")
+        ).coalesce(1).write.mode('overwrite').option('header', 'true').csv(output_dir)
+        
+        # Rename the part file to the desired output filename
+        import glob
+        part_files = glob.glob(os.path.join(output_dir, 'part-*.csv'))
+        if part_files:
+            import shutil
+            shutil.move(part_files[0], output_path)
+            shutil.rmtree(output_dir)
+            self.logger.info(f"\n💾 Full results saved to: {output_path}")
+        else:
+            self.logger.warning(f"\n⚠️  Results saved to directory: {output_dir}")
     
     def run(self, fraud_start_date, fraud_end_date, where_clause, output_dir=None):
         """Execute the analysis."""
@@ -301,15 +326,19 @@ class FraudCentroidVsQuery:
                 self.logger.error("❌ No transactions found matching query!")
                 return False
             
-            # Vectorize and scale
+            # Vectorize both dataframes
             self.logger.info(f"\n📐 Vectorizing {len(self.FEATURE_COLS)} features...")
-            fraud_df, scaler_model = self.vectorize_and_scale(fraud_df)
+            fraud_df = self.vectorize(fraud_df)
+            target_df = self.vectorize(target_df)
             
-            # Apply same scaler to target transactions
-            target_df = scaler_model.transform(
-                VectorAssembler(inputCols=self.FEATURE_COLS, outputCol="features_raw", 
-                               handleInvalid="skip").transform(target_df)
-            )
+            # Fit scaler on combined data to avoid data leakage
+            self.logger.info("📏 Fitting scaler on combined fraud + target data...")
+            combined_df = fraud_df.select('features_raw').union(target_df.select('features_raw'))
+            scaler_model = self.fit_scaler(combined_df)
+            
+            # Apply scaler to both dataframes
+            fraud_df = scaler_model.transform(fraud_df)
+            target_df = scaler_model.transform(target_df)
             
             # Calculate fraud centroid
             centroid_array, centroid_norm = self.calculate_fraud_centroid(fraud_df)

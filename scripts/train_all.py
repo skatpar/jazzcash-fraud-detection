@@ -104,7 +104,8 @@ class SimpleFraudPipeline:
         
         self.spark = (SparkSession.builder
             .appName("spark-clickhouse-fraud-detection")
-            .master("spark://10.205.161.118:7077")
+            # .master("spark://10.205.161.118:7077")
+            .master("local[*]")
             .config("spark.jars.packages", ",".join(packages))
             .config("spark.executor.memory", spark_cfg.get('executor_memory', '150g'))
             .config("spark.executor.memoryOverhead", spark_cfg.get('executor_memory_overhead', '5g'))
@@ -147,8 +148,7 @@ class SimpleFraudPipeline:
         query = f"""
             SELECT {', '.join(data_cfg['selected_features'])}
             FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
-            WHERE cutoff_date BETWEEN '{data_cfg['start_date']}' AND '{data_cfg['end_date']}'
-                AND mbar_account_type_name = 'Customer Account'
+            WHERE trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000 and cutoff_date between '2025-06-01' and '2025-06-30'      AND mbar_account_type_name = 'Customer Account'
         """
         
         self.logger.info(f"Date range: {data_cfg['start_date']} to {data_cfg['end_date']}")
@@ -218,7 +218,8 @@ class SimpleFraudPipeline:
         
         # Separate string and numeric columns (we'll determine this from schema later)
         # For now, assume these are the string columns based on the feature list
-        string_cols = ['trx_channel', 'trx_type', 'mbar_registered_channel']
+        # string_cols = ['trx_channel', 'trx_type', 'mbar_registered_channel']
+        string_cols = ['trx_channel', 'trx_type']
         numeric_cols = [f for f in all_features if f not in string_cols]
         
         self.logger.info(f"Features: {len(all_features)} total")
@@ -378,6 +379,41 @@ class SimpleFraudPipeline:
         self.logger.info(f"   Precision: {precision:.4f}")
         self.logger.info(f"   Recall: {recall:.4f}")
         self.logger.info(f"   F1-Score: {f1:.4f}")
+
+        # PySpark confusion matrix calculation
+        self.logger.info("Confusion Matrix:")
+        cm_counts = predictions.groupBy(target_col, "prediction").count().collect()
+        # Initialize counts
+        TP = TN = FP = FN = 0
+        for row in cm_counts:
+            if row[target_col] == 1 and row['prediction'] == 1:
+                TP = row['count']
+            elif row[target_col] == 0 and row['prediction'] == 0:
+                TN = row['count']
+            elif row[target_col] == 0 and row['prediction'] == 1:
+                FP = row['count']
+            elif row[target_col] == 1 and row['prediction'] == 0:
+                FN = row['count']
+        self.logger.info(f"TP: {TP}, TN: {TN}, FP: {FP}, FN: {FN}")
+        # Save confusion matrix as CSV and plot
+        import pandas as pd
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        matrix = [[TN, FP], [FN, TP]]
+        df_cm = pd.DataFrame(matrix, index=['Actual 0', 'Actual 1'], columns=['Predicted 0', 'Predicted 1'])
+        cm_path = os.path.join(self.config['analysis_dir'], f'{model_name}_confusion_matrix.csv')
+        df_cm.to_csv(cm_path)
+        self.logger.info(f"💾 Confusion matrix saved to: {cm_path}")
+        plt.figure(figsize=(5,4))
+        sns.heatmap(df_cm, annot=True, fmt='d', cmap='Blues')
+        plt.title(f'{model_name.replace("_", " ").title()} - Confusion Matrix')
+        plt.ylabel('Actual')
+        plt.xlabel('Predicted')
+        plt.tight_layout()
+        cm_plot_path = os.path.join(self.config['analysis_dir'], f'{model_name}_confusion_matrix.png')
+        plt.savefig(cm_plot_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        self.logger.info(f"💾 Confusion matrix plot saved to: {cm_plot_path}")
         
         return {
             'auc': auc,
@@ -431,22 +467,32 @@ class SimpleFraudPipeline:
     
     def save_pipeline(self, model_name: str):
         """Save the trained pipeline."""
-        model_path = os.path.join(self.config['model_dir'], f'{model_name}_pipeline_model_v2')
+        model_path = os.path.join(self.config['model_dir'], f'{model_name}_pipeline_model_fraud_scenario_v5')
         self.pipeline_model.write().overwrite().save(model_path)
         self.logger.info(f"💾 Pipeline saved to: {model_path}")
     
-    def load_data_by_period(self, start_date: str, end_date: str) -> DataFrame:
+    def load_data_by_period(self, start_date: str, end_date: str, eval=False) -> DataFrame:
         """Load data for a specific date period."""
         data_cfg = self.config['data']
         ch_cfg = self.config['clickhouse']
-        
-        query = f"""
-            SELECT {', '.join(data_cfg['selected_features'])}
-            FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
-            WHERE cutoff_date BETWEEN '{start_date}' AND '{end_date}'
+        if eval:
+            query = f"""
+                SELECT {', '.join(data_cfg['selected_features'])}
+                FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
+                WHERE cutoff_date BETWEEN '{start_date}' AND '{end_date}'
                 AND mbar_account_type_name = 'Customer Account'
-        """
-        
+                AND trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000
+            """
+        else:
+            query = f"""
+                SELECT {', '.join(data_cfg['selected_features'])}
+                FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
+                WHERE (cutoff_date BETWEEN '{start_date}' AND '{end_date}'
+                AND mbar_account_type_name = 'Customer Account'
+                AND trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000)
+                OR (fraud_flag=1 and cutoff_date<='{end_date}' and trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000)
+            """
+
         self.logger.info(f"Loading data from {start_date} to {end_date}...")
         start = time.time()
         df = self.spark.sql(query)
@@ -478,15 +524,10 @@ class SimpleFraudPipeline:
             self.logger.info("=" * 80)
             self.logger.info("LOADING TRAINING DATA")
             self.logger.info("=" * 80)
-            train_df = self.load_data_by_period('2025-03-01', '2025-06-30')
+            train_df = self.load_data_by_period('2025-05-01', '2025-06-30')
             
             # Downsample non-fraud data to 10%
-            train_df_balanced = self.downsample_data(train_df, sample_rate=0.01)
-            
-            # Load evaluation data (2025-07-01 to 2025-07-31)
-            self.logger.info("=" * 80)
-            self.logger.info("LOADING EVALUATION DATA")
-            self.logger.info("=" * 80)
+            train_df_balanced = self.downsample_data(train_df, sample_rate=100/554601)
             
             # Store results for all models
             all_results = {}
@@ -512,7 +553,7 @@ class SimpleFraudPipeline:
                 except Exception as e:
                     self.logger.warning(f"Could not extract feature importance: {str(e)}")
 
-            eval_df = self.load_data_by_period('2025-07-01', '2025-07-31')
+            eval_df = self.load_data_by_period('2025-07-01', '2025-07-31', eval=True)
 
             for model_type in model_types:
                 # Evaluate on test data
@@ -564,23 +605,31 @@ def load_config(config_path: Optional[str] = None) -> Dict:
             "start_date": "2025-06-01",
             "end_date": "2025-06-30",
             "target_column": "fraud_flag",
+            # "selected_features": [
+            #     'cutoff_date', 'fraud_flag', 'trx_channel', 'trx_type', 
+            #     'start_balance', 'trx_amt', 'mbar_registered_channel',
+            #     'hour_of_day', 'day_of_week', 'is_weekend', 'is_night', 
+            #     'is_business_hours', 'is_unusual_hour', 'night_weekend_combo',
+            #     'txn_txns_3d', 'txn_total_amount_3d', 'txn_avg_amount_3d',
+            #     'txn_max_amount_3d', 'txn_min_amount_3d', 'txn_unique_recipients_3d',
+            #     'txn_unique_channels_3d', 'txn_unique_types_3d', 'txn_is_high_activity_3d',
+            #     'txn_multi_channel_recent', 'txn_amount_deviation_from_avg',
+            #     'txn_night_txns_3d', 'txn_weekend_txns_3d',
+            #     'channel_new_jc_app', 'channel_ussd', 'channel_ussd_api',
+            #     'channel_payment_gateway', 'channel_mobile_app',
+            #     'type_transfer_c2c', 'type_transfer_c2b', 'type_bill_payment',
+            #     'type_mobile_load', 'user_total_txns_3d', 'user_total_amount_3d',
+            #     'user_avg_amount_3d', 'user_max_amount_3d', 'user_unique_recipients_3d',
+            #     'user_unique_channels_3d', 'user_total_txns_7d', 'user_avg_amount_7d',
+            #     'user_max_amount_7d', 'user_night_txns_7d', 'user_weekend_txns_7d'
+            # ]
             "selected_features": [
                 'cutoff_date', 'fraud_flag', 'trx_channel', 'trx_type', 
-                'start_balance', 'trx_amt', 'mbar_registered_channel',
-                'hour_of_day', 'day_of_week', 'is_weekend', 'is_night', 
-                'is_business_hours', 'is_unusual_hour', 'night_weekend_combo',
+                'start_balance', 'trx_amt',
+                'hour_of_day','is_weekend',
                 'txn_txns_3d', 'txn_total_amount_3d', 'txn_avg_amount_3d',
-                'txn_max_amount_3d', 'txn_min_amount_3d', 'txn_unique_recipients_3d',
-                'txn_unique_channels_3d', 'txn_unique_types_3d', 'txn_is_high_activity_3d',
-                'txn_multi_channel_recent', 'txn_amount_deviation_from_avg',
-                'txn_night_txns_3d', 'txn_weekend_txns_3d',
-                'channel_new_jc_app', 'channel_ussd', 'channel_ussd_api',
-                'channel_payment_gateway', 'channel_mobile_app',
-                'type_transfer_c2c', 'type_transfer_c2b', 'type_bill_payment',
-                'type_mobile_load', 'user_total_txns_3d', 'user_total_amount_3d',
-                'user_avg_amount_3d', 'user_max_amount_3d', 'user_unique_recipients_3d',
-                'user_unique_channels_3d', 'user_total_txns_7d', 'user_avg_amount_7d',
-                'user_max_amount_7d', 'user_night_txns_7d', 'user_weekend_txns_7d'
+                'txn_max_amount_3d', 'txn_min_amount_3d', 'txn_unique_types_3d', 
+                'txn_multi_channel_recent', 'txn_amount_deviation_from_avg'
             ]
         },
         "clickhouse": {
@@ -623,11 +672,17 @@ def load_config(config_path: Optional[str] = None) -> Dict:
                 "reg_param": 0.01,
                 "elastic_net_param": 0.5
             },
+            # "gbt": {
+            #     "max_iter": 50,
+            #     "max_depth": 5,
+            #     "max_bins": 128,
+            #     "step_size": 0.1
+            # }
             "gbt": {
-                "max_iter": 50,
-                "max_depth": 5,
-                "max_bins": 128,
-                "step_size": 0.1
+                "max_iter": 200,
+                "max_depth": 20,
+                "max_bins": 256,
+                "step_size": 0.001
             }
         },
         "model_dir": "/root/research-dir/dev/jazzcash-fraud-detection/models",

@@ -102,7 +102,7 @@ class FraudInference:
         """Load trained pipeline model."""
         model_path = os.path.join(
             self.config['model_dir'], 
-            f'{self.model_type}_pipeline_model_v2'
+            f'{self.model_type}_pipeline_model_fraud_scenario_v5'
         )
         
         if not os.path.exists(model_path):

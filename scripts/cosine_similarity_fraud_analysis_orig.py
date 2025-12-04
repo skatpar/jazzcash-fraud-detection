@@ -63,6 +63,7 @@ class CosineSimilarityFraudAnalyzer:
         self.spark = (SparkSession.builder
             .appName("CosineSimilarityFraudAnalysis")
             .master("spark://10.205.161.118:7077")
+            # .master("local[*]")
             .config("spark.jars.packages", ",".join(packages))
             .config("spark.executor.memory", "150g")
             .config("spark.executor.memoryOverhead", "5g")

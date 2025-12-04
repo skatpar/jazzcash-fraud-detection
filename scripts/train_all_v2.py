@@ -55,6 +55,7 @@ try:
     XGBOOST_AVAILABLE = True
 except ImportError:
     XGBOOST_AVAILABLE = False
+    
 
 # LightGBM for Spark (SynapseML)
 try:
@@ -230,7 +231,8 @@ class SimpleFraudPipeline:
             "com.clickhouse.spark:clickhouse-spark-runtime-3.5_2.12:0.8.1",
             "com.clickhouse:clickhouse-client:0.9.4",
             "com.clickhouse:clickhouse-http-client:0.9.4",
-            "org.apache.httpcomponents.client5:httpclient5:5.2.1"
+            "org.apache.httpcomponents.client5:httpclient5:5.2.1",
+            "com.microsoft.azure.synapse:synapseml_2.12:1.1.0"
         ]
         
         # Get Spark configuration from config
@@ -249,6 +251,7 @@ class SimpleFraudPipeline:
             .config("spark.default.parallelism", str(spark_cfg.get('parallelism', 96)))
             .getOrCreate()
         )
+        self.spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
         
         # Configure ClickHouse catalog
         ch = self.config['clickhouse']
@@ -455,7 +458,6 @@ class SimpleFraudPipeline:
                 max_depth=xgb_cfg.get('max_depth', 6),
                 n_estimators=xgb_cfg.get('n_estimators', 100),
                 learning_rate=xgb_cfg.get('learning_rate', 0.1),
-                objective=xgb_cfg.get('objective', 'binary:logistic'),
                 eval_metric=xgb_cfg.get('eval_metric', 'auc'),
                 use_gpu=xgb_cfg.get('use_gpu', False),
                 random_state=self.config['training']['random_seed']
@@ -663,6 +665,13 @@ class SimpleFraudPipeline:
         recall = multiclass_eval.evaluate(predictions, {multiclass_eval.metricName: "weightedRecall"})
         f1 = multiclass_eval.evaluate(predictions, {multiclass_eval.metricName: "f1"})
         
+        # Confusion matrix
+        y_true = predictions.select(target_col).rdd.flatMap(lambda x: x).collect()
+        y_pred = predictions.select("prediction").rdd.flatMap(lambda x: x).collect()
+        from sklearn.metrics import confusion_matrix
+        cm = confusion_matrix(y_true, y_pred)
+        self.logger.info(f"Confusion Matrix:\n{cm}")
+        
         self.logger.info(f"📊 {model_name} Performance:")
         self.logger.info(f"   AUC-ROC: {auc:.4f}")
         self.logger.info(f"   Accuracy: {accuracy:.4f}")
@@ -675,7 +684,8 @@ class SimpleFraudPipeline:
             'accuracy': accuracy,
             'precision': precision,
             'recall': recall,
-            'f1': f1
+            'f1': f1,
+            'confusion_matrix': cm.tolist()
         }
     
     def evaluate_isolation_forest(self, df: DataFrame, model_name: str):
@@ -804,7 +814,8 @@ class SimpleFraudPipeline:
     
     def save_pipeline(self, model_name: str):
         """Save the trained pipeline."""
-        model_path = os.path.join(self.config['model_dir'], f'{model_name}_pipeline_model_v2')
+        version = self.config.get('model_version', 'v2')
+        model_path = os.path.join(self.config['model_dir'], f'{model_name}_pipeline_model_{version}')
         self.pipeline_model.write().overwrite().save(model_path)
         self.logger.info(f"💾 Pipeline saved to: {model_path}")
     
@@ -847,19 +858,20 @@ class SimpleFraudPipeline:
             # Initialize
             self.initialize_spark()
             
-            # Load training data (2025-03-01 to 2025-06-30)
+            # Load training data (use config dates)
             self.logger.info("=" * 80)
             self.logger.info("LOADING TRAINING DATA")
             self.logger.info("=" * 80)
-            train_df = self.load_data_by_period('2025-03-01', '2025-06-30')
+            train_df = self.load_data_by_period(self.config['data']['start_date'], self.config['data']['end_date'])
             
             # Downsample non-fraud data to 10%
             train_df_balanced = self.downsample_data(train_df, sample_rate=0.01)
             
-            # Load evaluation data (2025-07-01 to 2025-07-31)
+            # Load evaluation data (use config dates)
             self.logger.info("=" * 80)
             self.logger.info("LOADING EVALUATION DATA")
             self.logger.info("=" * 80)
+            eval_df = self.load_data_by_period(self.config['eval_start_date'], self.config['eval_end_date'])
             
             # Store trained models for evaluation
             trained_models = {}
@@ -890,7 +902,7 @@ class SimpleFraudPipeline:
                 except Exception as e:
                     self.logger.warning(f"Could not extract feature importance: {str(e)}")
 
-            eval_df = self.load_data_by_period('2025-07-01', '2025-07-31')
+            eval_df = self.load_data_by_period('2025-07-01', '2025-07-01')
 
             for model_type in model_types:
                 # Restore the trained model for evaluation
@@ -900,6 +912,38 @@ class SimpleFraudPipeline:
                 metrics = self.evaluate_pipeline(eval_df, model_type)
                 self.logger.info(f"Evaluation for {model_type} completed.")
                 all_results[model_type] = metrics
+
+            # Score a specific transaction (ID: 89942951756)
+            self.logger.info("\nScoring specific transaction ID: 89942951756")
+            # Fetch transaction from full table (not just July)
+            ch_cfg = self.config['clickhouse']
+            data_cfg = self.config['data']
+            query = f"""
+                SELECT {', '.join(data_cfg['selected_features'])}
+                FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
+                WHERE trans_id = '89942951756'
+            """
+            txn_df = self.spark.sql(query)
+            txn_count = txn_df.count()
+            if txn_count == 0:
+                self.logger.warning("Transaction ID 89942951756 not found in source table.")
+            else:
+                for model_type in model_types:
+                    self.pipeline_model = trained_models[model_type]
+                    self.logger.info(f"Scoring transaction for model: {model_type}")
+                    try:
+                        pred_df = self.pipeline_model.transform(txn_df)
+                        pred_row = pred_df.collect()[0]
+                        score = None
+                        if hasattr(pred_row, 'probability'):
+                            # Spark models: probability is a DenseVector
+                            score = pred_row.probability[1] if hasattr(pred_row.probability, '__getitem__') else float(pred_row.probability)
+                        elif hasattr(pred_row, 'probability_fraud'):
+                            # Isolation Forest
+                            score = pred_row.probability_fraud
+                        self.logger.info(f"Transaction ID: {pred_row.trx_id}, True Label: {getattr(pred_row, data_cfg['target_column'], None)}, Fraud Score: {score}")
+                    except Exception as e:
+                        self.logger.warning(f"Could not score transaction for model {model_type}: {str(e)}")
                 
                 
                 
@@ -1057,11 +1101,22 @@ def main():
     parser.add_argument('--models', type=str, nargs='+', 
                        choices=['decision_tree', 'random_forest', 'logistic_regression', 'gbt', 'xgboost', 'lightgbm', 'isolation_forest', 'all'],
                        default=['all'], help='Model types to train (default: all)')
+    parser.add_argument('--train_start', type=str, default='2025-06-01', help='Training period start date (YYYY-MM-DD)')
+    parser.add_argument('--train_end', type=str, default='2025-06-01', help='Training period end date (YYYY-MM-DD)')
+    parser.add_argument('--eval_start', type=str, default='2025-07-01', help='Evaluation period start date (YYYY-MM-DD)')
+    parser.add_argument('--eval_end', type=str, default='2025-07-01', help='Evaluation period end date (YYYY-MM-DD)')
+    parser.add_argument('--model_version', type=str, default='test', help='Model version name to append to saved model files')
     
     args = parser.parse_args()
     
     # Load config
     config = load_config(args.config)
+    # Override config dates if provided
+    config['data']['start_date'] = args.train_start
+    config['data']['end_date'] = args.train_end
+    config['eval_start_date'] = args.eval_start
+    config['eval_end_date'] = args.eval_end
+    config['model_version'] = args.model_version
     
     # Determine which models to train
     if 'all' in args.models:
