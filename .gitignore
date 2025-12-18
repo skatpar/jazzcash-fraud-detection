@@ -6,8 +6,6 @@ mlruns
 scripts/__pycache__/
 airflow
 utils
-models
-analysis
 conf
 
 # Large CSV files and Spark outputs

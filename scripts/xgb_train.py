@@ -5,7 +5,7 @@ XGBoost Fraud Detection Training Pipeline
 Pipeline using XGBoost with robust error handling to skip erroneous rows.
 
 Key Features:
-- XGBoost natively handles missing values (NaN) in numeric features
+- XGBoost natively handles missing  values (NaN) in numeric features
 - Infinite values are converted to NaN for XGBoost to handle
 - Categorical features are encoded and missing values filled
 - Only rows with invalid categorical or target values are removed

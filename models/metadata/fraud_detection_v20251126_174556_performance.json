@@ -1,0 +1,30 @@
+{
+  "model_version": "fraud_detection_v20251126_174556",
+  "training_timestamp": "20251126_174556",
+  "dataset_info": {
+    "total_samples": 999984,
+    "fraud_samples": 6847,
+    "non_fraud_samples": 993137,
+    "fraud_rate": 0.00684710955375286,
+    "train_samples": 799987,
+    "test_samples": 199997
+  },
+  "performance_metrics": {
+    "auc_roc": 0.8818293934667936,
+    "accuracy": 0.8124571868578029,
+    "fraud_precision": 0.0287897358333116,
+    "fraud_recall": 0.8064280496712929,
+    "fraud_f1_score": 0.05559472252996273,
+    "legitimate_precision": 0.9983606557377049,
+    "legitimate_recall": 0.8124987413657692,
+    "legitimate_f1_score": 0.8958915060036972,
+    "false_positive_rate": 0.1875012586342308,
+    "false_negative_rate": 0.19357195032870708
+  },
+  "confusion_matrix": {
+    "true_negatives": 161385,
+    "false_positives": 37243,
+    "false_negatives": 265,
+    "true_positives": 1104
+  }
+}

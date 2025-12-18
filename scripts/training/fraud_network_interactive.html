@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 700px;
+                 background-color: #1a1a2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#4ecdc4", "font": {"color": "white"}, "id": "L1rzDjzMyKnu", "label": "L1rzDjzM", "shape": "dot", "size": 30.62134463673537, "title": "Account: L1rzDjzMyKnu\nIn-Degree: 0\nOut-Degree: 62\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "XsrLD5Ognc+T", "label": "XsrLD5Og", "shape": "dot", "size": 30.62223954676249, "title": "Account: XsrLD5Ognc+T\nIn-Degree: 0\nOut-Degree: 84\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "6RRndEA7x/2/", "label": "6RRndEA7", "shape": "dot", "size": 30.621706042707856, "title": "Account: 6RRndEA7x/2/\nIn-Degree: 0\nOut-Degree: 68\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "pVdLEaXzMWUh", "label": "pVdLEaXz", "shape": "dot", "size": 30.621628598570897, "title": "Account: pVdLEaXzMWUh\nIn-Degree: 0\nOut-Degree: 67\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "z/DcBUQQ8uIl", "label": "z/DcBUQQ", "shape": "dot", "size": 30.62134463673537, "title": "Account: z/DcBUQQ8uIl\nIn-Degree: 0\nOut-Degree: 62\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "/QGfZo0WQOqX", "label": "/QGfZo0W", "shape": "dot", "size": 30.621490920105185, "title": "Account: /QGfZo0WQOqX\nIn-Degree: 0\nOut-Degree: 64\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "Yl5clc0mfdd7", "label": "Yl5clc0m", "shape": "dot", "size": 30.621706042707856, "title": "Account: Yl5clc0mfdd7\nIn-Degree: 0\nOut-Degree: 68\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "LbybIXEgblSs", "label": "LbybIXEg", "shape": "dot", "size": 30.622411644844632, "title": "Account: LbybIXEgblSs\nIn-Degree: 0\nOut-Degree: 100\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "ZbC7eBriQ0rA", "label": "ZbC7eBri", "shape": "dot", "size": 30.6221276830091, "title": "Account: ZbC7eBriQ0rA\nIn-Degree: 0\nOut-Degree: 79\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "2oB5062u/l5e", "label": "2oB5062u", "shape": "dot", "size": 30.62142208087233, "title": "Account: 2oB5062u/l5e\nIn-Degree: 0\nOut-Degree: 63\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "Pehjq6MXy+YJ", "label": "Pehjq6MX", "shape": "dot", "size": 30.62215349772142, "title": "Account: Pehjq6MXy+YJ\nIn-Degree: 0\nOut-Degree: 80\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "MB7pWa2u8Kmc", "label": "MB7pWa2u", "shape": "dot", "size": 30.6221276830091, "title": "Account: MB7pWa2u8Kmc\nIn-Degree: 0\nOut-Degree: 79\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "zTfBAzwTgmO2", "label": "zTfBAzwT", "shape": "dot", "size": 30.62190395550232, "title": "Account: zTfBAzwTgmO2\nIn-Degree: 0\nOut-Degree: 72\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "2FxhWU7PeDD8", "label": "2FxhWU7P", "shape": "dot", "size": 30.62204163396803, "title": "Account: 2FxhWU7PeDD8\nIn-Degree: 0\nOut-Degree: 76\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "aQRPNGdESebF", "label": "aQRPNGdE", "shape": "dot", "size": 30.621783486844823, "title": "Account: aQRPNGdESebF\nIn-Degree: 0\nOut-Degree: 69\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "hzz/NyV7RIoF", "label": "hzz/NyV7", "shape": "dot", "size": 30.622428854652842, "title": "Account: hzz/NyV7RIoF\nIn-Degree: 0\nOut-Degree: 101\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "80Z+8ileMUPI", "label": "80Z+8ile", "shape": "dot", "size": 30.622480484077485, "title": "Account: 80Z+8ileMUPI\nIn-Degree: 0\nOut-Degree: 117\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "VApJioi5p5Mr", "label": "VApJioi5", "shape": "dot", "size": 30.621835116269466, "title": "Account: VApJioi5p5Mr\nIn-Degree: 0\nOut-Degree: 70\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "SZ6Mes+rYEnY", "label": "SZ6Mes+r", "shape": "dot", "size": 30.621490920105185, "title": "Account: SZ6Mes+rYEnY\nIn-Degree: 0\nOut-Degree: 64\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "MkQ4G/vdB2Uq", "label": "MkQ4G/vd", "shape": "dot", "size": 30.6220072143516, "title": "Account: MkQ4G/vdB2Uq\nIn-Degree: 0\nOut-Degree: 74\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "O337ydawzYj5", "label": "O337ydaw", "shape": "dot", "size": 30.622196522241957, "title": "Account: O337ydawzYj5\nIn-Degree: 0\nOut-Degree: 82\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "3tvHJ+JayQpx", "label": "3tvHJ+Ja", "shape": "dot", "size": 30.622308385995346, "title": "Account: 3tvHJ+JayQpx\nIn-Degree: 0\nOut-Degree: 91\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "3Qzkx3Q6oPHZ", "label": "3Qzkx3Q6", "shape": "dot", "size": 30.622084658488568, "title": "Account: 3Qzkx3Q6oPHZ\nIn-Degree: 0\nOut-Degree: 78\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "L5JgNKJDDZ9r", "label": "L5JgNKJD", "shape": "dot", "size": 30.621628598570897, "title": "Account: L5JgNKJDDZ9r\nIn-Degree: 0\nOut-Degree: 67\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "Q6A5l8dSlR5P", "label": "Q6A5l8dS", "shape": "dot", "size": 30.621551154433938, "title": "Account: Q6A5l8dSlR5P\nIn-Degree: 0\nOut-Degree: 65\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "2lhFE+McznsG", "label": "2lhFE+Mc", "shape": "dot", "size": 30.62142208087233, "title": "Account: 2lhFE+McznsG\nIn-Degree: 0\nOut-Degree: 63\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "dDvkwxUlIZ3U", "label": "dDvkwxUl", "shape": "dot", "size": 30.6212585876943, "title": "Account: dDvkwxUlIZ3U\nIn-Degree: 0\nOut-Degree: 61\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "IadtOLNji57T", "label": "IadtOLNj", "shape": "dot", "size": 30.621490920105185, "title": "Account: IadtOLNji57T\nIn-Degree: 0\nOut-Degree: 64\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "uoVa5v2JhkzB", "label": "uoVa5v2J", "shape": "dot", "size": 30.62190395550232, "title": "Account: uoVa5v2JhkzB\nIn-Degree: 0\nOut-Degree: 72\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "RgsqrJiikJJ7", "label": "RgsqrJii", "shape": "dot", "size": 30.621706042707856, "title": "Account: RgsqrJiikJJ7\nIn-Degree: 0\nOut-Degree: 68\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "eJ2iSD7PzMZA", "label": "eJ2iSD7P", "shape": "dot", "size": 30.621490920105185, "title": "Account: eJ2iSD7PzMZA\nIn-Degree: 0\nOut-Degree: 64\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "L9+HclnBF/WP", "label": "L9+HclnB", "shape": "dot", "size": 30.62142208087233, "title": "Account: L9+HclnBF/WP\nIn-Degree: 0\nOut-Degree: 63\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "xCQ99uSf2IUN", "label": "xCQ99uSf", "shape": "dot", "size": 30.621972794735175, "title": "Account: xCQ99uSf2IUN\nIn-Degree: 0\nOut-Degree: 73\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "pTF2KFQQ9NaV", "label": "pTF2KFQQ", "shape": "dot", "size": 30.62142208087233, "title": "Account: pTF2KFQQ9NaV\nIn-Degree: 0\nOut-Degree: 63\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "ur3U62yOOMHU", "label": "ur3U62yO", "shape": "dot", "size": 30.621628598570897, "title": "Account: ur3U62yOOMHU\nIn-Degree: 0\nOut-Degree: 67\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "0cI7A+GK4GMP", "label": "0cI7A+GK", "shape": "dot", "size": 30.621783486844823, "title": "Account: 0cI7A+GK4GMP\nIn-Degree: 0\nOut-Degree: 69\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "1gw4WRHwoqz9", "label": "1gw4WRHw", "shape": "dot", "size": 30.62232559580356, "title": "Account: 1gw4WRHwoqz9\nIn-Degree: 0\nOut-Degree: 92\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "lmaqqB/+agx2", "label": "lmaqqB/+", "shape": "dot", "size": 30.6224976938857, "title": "Account: lmaqqB/+agx2\nIn-Degree: 0\nOut-Degree: 131\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "cCI8eXQ76emj", "label": "cCI8eXQ7", "shape": "dot", "size": 30.62251490369391, "title": "Account: cCI8eXQ76emj\nIn-Degree: 0\nOut-Degree: 158\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "y/JdV26WplnY", "label": "y/JdV26W", "shape": "dot", "size": 30.62227396637892, "title": "Account: y/JdV26WplnY\nIn-Degree: 0\nOut-Degree: 85\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "jfOs/KdOLcMr", "label": "jfOs/KdO", "shape": "dot", "size": 30.622291176187133, "title": "Account: jfOs/KdOLcMr\nIn-Degree: 0\nOut-Degree: 88\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "TmSCVWGGYq79", "label": "TmSCVWGG", "shape": "dot", "size": 30.622463274269272, "title": "Account: TmSCVWGGYq79\nIn-Degree: 0\nOut-Degree: 115\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "wkOkv1WRJKNl", "label": "wkOkv1WR", "shape": "dot", "size": 30.62134463673537, "title": "Account: wkOkv1WRJKNl\nIn-Degree: 0\nOut-Degree: 62\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "nNnXpA3FTwdU", "label": "nNnXpA3F", "shape": "dot", "size": 30.62244606446106, "title": "Account: nNnXpA3FTwdU\nIn-Degree: 0\nOut-Degree: 106\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "tglJIlQ3YAug", "label": "tglJIlQ3", "shape": "dot", "size": 30.6212585876943, "title": "Account: tglJIlQ3YAug\nIn-Degree: 0\nOut-Degree: 61\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "k5Ea449pg6ev", "label": "k5Ea449p", "shape": "dot", "size": 30.622196522241957, "title": "Account: k5Ea449pg6ev\nIn-Degree: 0\nOut-Degree: 82\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "0Um8jv3e3H1l", "label": "0Um8jv3e", "shape": "dot", "size": 30.62190395550232, "title": "Account: 0Um8jv3e3H1l\nIn-Degree: 0\nOut-Degree: 72\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "yO9YkYmXSIDd", "label": "yO9YkYmX", "shape": "dot", "size": 30.622532113502125, "title": "Account: yO9YkYmXSIDd\nIn-Degree: 0\nOut-Degree: 187\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "70V0pDenjQPr", "label": "70V0pDen", "shape": "dot", "size": 30.621706042707856, "title": "Account: 70V0pDenjQPr\nIn-Degree: 0\nOut-Degree: 68\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "raBKJuhwmcQR", "label": "raBKJuhw", "shape": "dot", "size": 30.62190395550232, "title": "Account: raBKJuhwmcQR\nIn-Degree: 0\nOut-Degree: 72\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "b4jYOCAJYXtU", "label": "b4jYOCAJ", "shape": "dot", "size": 30.622084658488568, "title": "Account: b4jYOCAJYXtU\nIn-Degree: 0\nOut-Degree: 78\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "wQELJwWMm61R", "label": "wQELJwWM", "shape": "dot", "size": 30.62190395550232, "title": "Account: wQELJwWMm61R\nIn-Degree: 0\nOut-Degree: 72\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "cD1C+naE2paS", "label": "cD1C+naE", "shape": "dot", "size": 30.622368620324096, "title": "Account: cD1C+naE2paS\nIn-Degree: 0\nOut-Degree: 97\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "qXTbM8vB/azS", "label": "qXTbM8vB", "shape": "dot", "size": 30.622084658488568, "title": "Account: qXTbM8vB/azS\nIn-Degree: 0\nOut-Degree: 78\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "lNIcSVdwoKDQ", "label": "lNIcSVdw", "shape": "dot", "size": 30.621551154433938, "title": "Account: lNIcSVdwoKDQ\nIn-Degree: 0\nOut-Degree: 65\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "yCvB4aqN92WA", "label": "yCvB4aqN", "shape": "dot", "size": 30.621783486844823, "title": "Account: yCvB4aqN92WA\nIn-Degree: 0\nOut-Degree: 69\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "9pXBGxbLbURh", "label": "9pXBGxbL", "shape": "dot", "size": 30.621585574050364, "title": "Account: 9pXBGxbLbURh\nIn-Degree: 0\nOut-Degree: 66\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "ARor54GE4hDb", "label": "ARor54GE", "shape": "dot", "size": 30.621835116269466, "title": "Account: ARor54GE4hDb\nIn-Degree: 0\nOut-Degree: 70\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "epJA51niiJS/", "label": "epJA51ni", "shape": "dot", "size": 30.622170707529634, "title": "Account: epJA51niiJS/\nIn-Degree: 0\nOut-Degree: 81\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "WjfRgRfb9mlM", "label": "WjfRgRfb", "shape": "dot", "size": 30.621706042707856, "title": "Account: WjfRgRfb9mlM\nIn-Degree: 0\nOut-Degree: 68\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "xTtSpdF9pYub", "label": "xTtSpdF9", "shape": "dot", "size": 30.621783486844823, "title": "Account: xTtSpdF9pYub\nIn-Degree: 0\nOut-Degree: 69\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "ziwhdLGC5guH", "label": "ziwhdLGC", "shape": "dot", "size": 30.62223954676249, "title": "Account: ziwhdLGC5guH\nIn-Degree: 0\nOut-Degree: 84\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "ccsfZy13/Gy8", "label": "ccsfZy13", "shape": "dot", "size": 30.62190395550232, "title": "Account: ccsfZy13/Gy8\nIn-Degree: 0\nOut-Degree: 72\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "4HHNIfN9kIFp", "label": "4HHNIfN9", "shape": "dot", "size": 30.6220072143516, "title": "Account: 4HHNIfN9kIFp\nIn-Degree: 0\nOut-Degree: 74\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "0h/rKzwibqFn", "label": "0h/rKzwi", "shape": "dot", "size": 30.62223954676249, "title": "Account: 0h/rKzwibqFn\nIn-Degree: 0\nOut-Degree: 84\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "LLEVnc6whJno", "label": "LLEVnc6w", "shape": "dot", "size": 30.621551154433938, "title": "Account: LLEVnc6whJno\nIn-Degree: 0\nOut-Degree: 65\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "bKm0/vTGwQIc", "label": "bKm0/vTG", "shape": "dot", "size": 30.62204163396803, "title": "Account: bKm0/vTGwQIc\nIn-Degree: 0\nOut-Degree: 76\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "OLmfifwuDIbW", "label": "OLmfifwu", "shape": "dot", "size": 30.622342805611773, "title": "Account: OLmfifwuDIbW\nIn-Degree: 0\nOut-Degree: 94\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "K/PEFSAg7VAo", "label": "K/PEFSAg", "shape": "dot", "size": 30.62134463673537, "title": "Account: K/PEFSAg7VAo\nIn-Degree: 0\nOut-Degree: 62\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "rYkma1FlnM8W", "label": "rYkma1Fl", "shape": "dot", "size": 30.622368620324096, "title": "Account: rYkma1FlnM8W\nIn-Degree: 0\nOut-Degree: 97\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "QBtBspOCVDU7", "label": "QBtBspOC", "shape": "dot", "size": 30.62134463673537, "title": "Account: QBtBspOCVDU7\nIn-Degree: 0\nOut-Degree: 62\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "IgrfjLKcDRB1", "label": "IgrfjLKc", "shape": "dot", "size": 30.6212585876943, "title": "Account: IgrfjLKcDRB1\nIn-Degree: 0\nOut-Degree: 61\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "V1+SYxo/PL4I", "label": "V1+SYxo/", "shape": "dot", "size": 30.621628598570897, "title": "Account: V1+SYxo/PL4I\nIn-Degree: 0\nOut-Degree: 67\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "6VsonNZQMGsO", "label": "6VsonNZQ", "shape": "dot", "size": 30.621972794735175, "title": "Account: 6VsonNZQMGsO\nIn-Degree: 0\nOut-Degree: 73\nRole: Sender"}, {"color": "#4ecdc4", "font": {"color": "white"}, "id": "pTOyZYFU3EnE", "label": "pTOyZYFU", "shape": "dot", "size": 30.622394435036416, "title": "Account: pTOyZYFU3EnE\nIn-Degree: 0\nOut-Degree: 99\nRole: Sender"}]);
+                  edges = new vis.DataSet([]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"physics": {"forceAtlas2Based": {"gravitationalConstant": -100, "springLength": 150, "springConstant": 0.08}, "solver": "forceAtlas2Based", "stabilization": {"iterations": 100}}, "edges": {"smooth": {"type": "curvedCW", "roundness": 0.2}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

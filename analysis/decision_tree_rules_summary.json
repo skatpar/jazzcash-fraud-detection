@@ -1,0 +1,8 @@
+{
+  "total_rules": 8,
+  "fraud_rules": 1,
+  "non_fraud_rules": 7,
+  "avg_depth": 2.875,
+  "max_depth": 4,
+  "avg_confidence": 0.5
+}

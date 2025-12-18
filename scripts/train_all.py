@@ -148,7 +148,14 @@ class SimpleFraudPipeline:
         query = f"""
             SELECT {', '.join(data_cfg['selected_features'])}
             FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
-            WHERE trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000 and cutoff_date between '2025-06-01' and '2025-06-30'      AND mbar_account_type_name = 'Customer Account'
+            -- WHERE trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000 and cutoff_date between '2025-06-01' and '2025-06-30'      AND mbar_account_type_name = 'Customer Account'
+        WHERE cutoff_date BETWEEN '{START_DATE}' AND '{END_DATE}'
+        AND mbar_account_type_name = 'Customer Account'
+        AND trx_channel='Payment Gateway'
+        AND trx_type='Online Payment'
+        AND ac_to IS NOT NULL 
+        AND ac_to<>''
+        AND start_balance<>end_balance
         """
         
         self.logger.info(f"Date range: {data_cfg['start_date']} to {data_cfg['end_date']}")
@@ -467,7 +474,7 @@ class SimpleFraudPipeline:
     
     def save_pipeline(self, model_name: str):
         """Save the trained pipeline."""
-        model_path = os.path.join(self.config['model_dir'], f'{model_name}_pipeline_model_fraud_scenario_v5')
+        model_path = os.path.join(self.config['model_dir'], f'{model_name}_pipeline_model_fraud_scenario_v6')
         self.pipeline_model.write().overwrite().save(model_path)
         self.logger.info(f"💾 Pipeline saved to: {model_path}")
     
@@ -480,17 +487,34 @@ class SimpleFraudPipeline:
                 SELECT {', '.join(data_cfg['selected_features'])}
                 FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
                 WHERE cutoff_date BETWEEN '{start_date}' AND '{end_date}'
-                AND mbar_account_type_name = 'Customer Account'
-                AND trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000
+                    AND mbar_account_type_name = 'Customer Account'
+                    AND trx_channel='Payment Gateway'
+                    AND trx_type='Online Payment'
+                    AND ac_to IS NOT NULL 
+                    AND ac_to<>''
+                    AND start_balance<>end_balance
+
+
+                -- WHERE cutoff_date BETWEEN '{start_date}' AND '{end_date}'
+                -- AND mbar_account_type_name = 'Customer Account'
+                -- AND trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000
             """
         else:
             query = f"""
                 SELECT {', '.join(data_cfg['selected_features'])}
                 FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
-                WHERE (cutoff_date BETWEEN '{start_date}' AND '{end_date}'
-                AND mbar_account_type_name = 'Customer Account'
-                AND trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000)
-                OR (fraud_flag=1 and cutoff_date<='{end_date}' and trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000)
+                WHERE cutoff_date BETWEEN '{start_date}' AND '{end_date}'
+                    AND mbar_account_type_name = 'Customer Account'
+                    AND trx_channel='Payment Gateway'
+                    AND trx_type='Online Payment'
+                    AND ac_to IS NOT NULL 
+                    AND ac_to<>''
+                    AND start_balance<>end_balance
+
+               -- WHERE (cutoff_date BETWEEN '{start_date}' AND '{end_date}'
+               -- AND mbar_account_type_name = 'Customer Account'
+               -- AND trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000)
+               -- OR (fraud_flag=1 and cutoff_date<='{end_date}' and trx_channel='NEW_JC_APP' and trx_type='Transfer(C2B)' and start_balance>=25000 and trx_amt>=50000)
             """
 
         self.logger.info(f"Loading data from {start_date} to {end_date}...")
@@ -524,11 +548,12 @@ class SimpleFraudPipeline:
             self.logger.info("=" * 80)
             self.logger.info("LOADING TRAINING DATA")
             self.logger.info("=" * 80)
-            train_df = self.load_data_by_period('2025-05-01', '2025-06-30')
+            train_df = self.load_data_by_period('2025-06-01', '2025-06-01')
             
             # Downsample non-fraud data to 10%
-            train_df_balanced = self.downsample_data(train_df, sample_rate=100/554601)
-            
+            # train_df_balanced = train_df
+            train_df_balanced = self.downsample_data(train_df, sample_rate=0.1)
+
             # Store results for all models
             all_results = {}
             
@@ -553,7 +578,7 @@ class SimpleFraudPipeline:
                 except Exception as e:
                     self.logger.warning(f"Could not extract feature importance: {str(e)}")
 
-            eval_df = self.load_data_by_period('2025-07-01', '2025-07-31', eval=True)
+            eval_df = self.load_data_by_period('2025-07-01', '2025-07-01', eval=True)
 
             for model_type in model_types:
                 # Evaluate on test data
@@ -601,7 +626,7 @@ def load_config(config_path: Optional[str] = None) -> Dict:
     """Load configuration."""
     default_config = {
         "data": {
-            "table_name": "stixor_fraud_features_distributed",
+            "table_name": "stixor_fraud_features_distributed",  
             "start_date": "2025-06-01",
             "end_date": "2025-06-30",
             "target_column": "fraud_flag",

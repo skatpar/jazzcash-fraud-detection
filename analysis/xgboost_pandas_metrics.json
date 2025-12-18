@@ -1,0 +1,59 @@
+{
+  "model": "XGBoost (Pandas)",
+  "training_period": "2025-06-01 to 2025-06-30",
+  "testing_period": "2025-07-01 to 2025-07-31",
+  "training_data": {
+    "total_samples": 1820951,
+    "fraud_samples": 6847,
+    "non_fraud_samples": 1814104,
+    "non_fraud_sample_rate": 0.01,
+    "class_ratio": 264.9487366729955
+  },
+  "test_data": {
+    "total_samples": 2911679,
+    "fraud_samples": 5374,
+    "non_fraud_samples": 2906305,
+    "non_fraud_sample_rate": 0.01,
+    "class_ratio": 540.8085225158169
+  },
+  "model_info": {
+    "scale_pos_weight": 264.9487366729955,
+    "features": 45,
+    "training_time_seconds": 37.4719979763031,
+    "hyperparameters": {
+      "objective": "binary:logistic",
+      "eval_metric": [
+        "auc",
+        "logloss"
+      ],
+      "max_depth": 10,
+      "learning_rate": 0.1,
+      "n_estimators": 200,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "scale_pos_weight": 264.9487366729955,
+      "random_state": 42,
+      "tree_method": "hist",
+      "n_jobs": -1,
+      "verbosity": 1
+    }
+  },
+  "evaluation_metrics": {
+    "accuracy": 0.9799785621972752,
+    "precision": 0.044058860017919914,
+    "recall": 0.47580945292147375,
+    "f1_score": 0.08064973978867686,
+    "auc_roc": 0.8927319612288057,
+    "average_precision": 0.11207121738581137,
+    "specificity": 0.9809108128706382,
+    "false_positive_rate": 0.01908918712936185,
+    "false_negative_rate": 0.5241905470785262
+  },
+  "confusion_matrix": {
+    "true_negatives": 2850826,
+    "false_positives": 55479,
+    "false_negatives": 2817,
+    "true_positives": 2557
+  },
+  "timestamp": "2025-11-18T15:27:43.509957"
+}
