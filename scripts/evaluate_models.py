@@ -138,6 +138,13 @@ class ModelEvaluator:
             FROM clickhouse.{ch_cfg['database']}.{data_cfg['table_name']}
             WHERE cutoff_date BETWEEN '{start_date}' AND '{end_date}'
                 AND mbar_account_type_name = 'Customer Account'
+                    AND trx_channel='NEW_JC_APP'
+                    AND trx_type='Transfer(C2C)'
+                    AND ac_to IS NOT NULL 
+                    AND start_balance<>end_balance
+                    AND ac_to<>''
+
+
         """
         
         self.logger.info(f"Date range: {start_date} to {end_date}")

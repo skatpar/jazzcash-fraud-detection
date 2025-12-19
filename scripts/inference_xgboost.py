@@ -103,7 +103,7 @@ class XGBoostFraudInference:
         self.logger.info(f"✅ Spark initialized (Version: {self.spark.version})")
 
     def load_model(self):
-        model_path = os.path.join(self.config['model_dir'], 'xgboost_model_fraud_scenario_v4.json')
+        model_path = os.path.join(self.config['model_dir'], 'xgboost_pandas_fraud_model.json')
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model not found: {model_path}")
         self.logger.info(f"Loading XGBoost model from: {model_path}")
