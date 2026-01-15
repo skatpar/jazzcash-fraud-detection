@@ -1,7 +1,0 @@
-{
-  "original_mean": 0.8856439751967736,
-  "original_std": 1.7763568394002505e-15,
-  "calibrated_mean": 3.7065995655585687e-05,
-  "calibrated_std": 1.2197274440461925e-19,
-  "calibration_method": "isotonic"
-}

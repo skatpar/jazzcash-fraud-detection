@@ -55,7 +55,7 @@ CONFIG = {
         'txn_multi_channel_recent', 'txn_amount_deviation_from_avg'
     ],
     "mlflow": {
-        "tracking_uri": "http://localhost:5001",
+        "tracking_uri": "/root/research-dir/dev/ArgusAI/experiments",
         "experiment_name": "fraud_detection_pipeline"
     }
 }
